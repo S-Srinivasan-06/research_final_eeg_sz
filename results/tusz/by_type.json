@@ -1,0 +1,757 @@
+{
+  "provenance": {
+    "git_commit": "d669e1cefa256c95a24c7afc34597fd6484d5339",
+    "date": "2026-10-15 17:20",
+    "command": "python -m szfusion.eval.by_type --fusion_1s <work>/tusz/fusion_1s --out results/tusz/by_type.json",
+    "source": "official"
+  },
+  "definitions": {
+    "data": "TUSZ v2.0.6 eval, scored seconds of the 1 s fusion stage (eval_tracks.npz)",
+    "models": {
+      "fused_mean": "fusion",
+      "catboost": "CatBoost branch",
+      "linoss_mean": "LinOSS 5-seed mean"
+    },
+    "event_points": {
+      "ev": "event point 1 (dev FA/24h <= 16.56), frozen on dev",
+      "ev2": "event point 2 (dev FA/24h <= 33.12), frozen on dev"
+    },
+    "type_rule": "majority TUSZ per-channel .csv seizure type over the event's labelled channel-seconds (seconds of the event overlapped by a .csv row on one of the 22 TCP channels, counted per type and summed over channels; ties -> alphabetical); group = group of the majority type: focal {fnsz, cpsz, spsz}, generalized {gnsz, absz, tcsz, tnsz, mysz}, else other",
+    "duration_bins_s": "[0,10), [10,30), [30,60), [60,180), [180,inf); duration = scored seconds of the event",
+    "event_sens": "any-overlap, as fusion/protocol_1s.event_scores",
+    "median_latency_s": "signed: start of the first predicted event overlapping the true event minus the true onset; median over detected events",
+    "second_recall": "seconds of the stratum's true events inside predicted events / all their seconds"
+  },
+  "n_true_events": 359,
+  "events_per_stratum": {
+    "all": 359,
+    "type/fnsz": 152,
+    "type/gnsz": 108,
+    "type/absz": 49,
+    "type/cpsz": 41,
+    "type/tcsz": 8,
+    "type/tnsz": 1,
+    "group/focal": 193,
+    "group/generalized": 166,
+    "group/other": 0,
+    "duration/0-10s": 50,
+    "duration/10-30s": 86,
+    "duration/30-60s": 72,
+    "duration/60-180s": 131,
+    "duration/180-infs": 20
+  },
+  "events_with_more_than_one_type": 0,
+  "events_without_csv_label": 0,
+  "majority_type_share_min_median": [
+    1.0,
+    1.0
+  ],
+  "results": {
+    "ev": {
+      "fused_mean": {
+        "all": {
+          "n_events": 359,
+          "n_detected": 182,
+          "event_sens": 0.5069637883008357,
+          "median_latency_s": -5.0,
+          "second_recall": 0.5937164117403886,
+          "n_seconds": 24190
+        },
+        "type/fnsz": {
+          "n_events": 152,
+          "n_detected": 67,
+          "event_sens": 0.4407894736842105,
+          "median_latency_s": 5.0,
+          "second_recall": 0.4229381659535196,
+          "n_seconds": 11919
+        },
+        "type/gnsz": {
+          "n_events": 108,
+          "n_detected": 85,
+          "event_sens": 0.7870370370370371,
+          "median_latency_s": -14.0,
+          "second_recall": 0.8159683599060684,
+          "n_seconds": 8091
+        },
+        "type/absz": {
+          "n_events": 49,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 330
+        },
+        "type/cpsz": {
+          "n_events": 41,
+          "n_detected": 25,
+          "event_sens": 0.6097560975609756,
+          "median_latency_s": 4.0,
+          "second_recall": 0.7599374021909233,
+          "n_seconds": 3195
+        },
+        "type/tcsz": {
+          "n_events": 8,
+          "n_detected": 5,
+          "event_sens": 0.625,
+          "median_latency_s": 1.0,
+          "second_recall": 0.47317073170731705,
+          "n_seconds": 615
+        },
+        "type/tnsz": {
+          "n_events": 1,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 40
+        },
+        "group/focal": {
+          "n_events": 193,
+          "n_detected": 92,
+          "event_sens": 0.47668393782383417,
+          "median_latency_s": 5.0,
+          "second_recall": 0.49417758369723436,
+          "n_seconds": 15114
+        },
+        "group/generalized": {
+          "n_events": 166,
+          "n_detected": 90,
+          "event_sens": 0.5421686746987951,
+          "median_latency_s": -11.5,
+          "second_recall": 0.759475539885412,
+          "n_seconds": 9076
+        },
+        "group/other": {
+          "n_events": 0
+        },
+        "duration/0-10s": {
+          "n_events": 50,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 337
+        },
+        "duration/10-30s": {
+          "n_events": 86,
+          "n_detected": 11,
+          "event_sens": 0.12790697674418605,
+          "median_latency_s": -14.0,
+          "second_recall": 0.13702074167190445,
+          "n_seconds": 1591
+        },
+        "duration/30-60s": {
+          "n_events": 72,
+          "n_detected": 50,
+          "event_sens": 0.6944444444444444,
+          "median_latency_s": -15.0,
+          "second_recall": 0.6792567773378008,
+          "n_seconds": 3283
+        },
+        "duration/60-180s": {
+          "n_events": 131,
+          "n_detected": 107,
+          "event_sens": 0.816793893129771,
+          "median_latency_s": 0.0,
+          "second_recall": 0.6867580672128407,
+          "n_seconds": 11962
+        },
+        "duration/180-infs": {
+          "n_events": 20,
+          "n_detected": 14,
+          "event_sens": 0.7,
+          "median_latency_s": 29.5,
+          "second_recall": 0.5271483539974348,
+          "n_seconds": 7017
+        }
+      },
+      "catboost": {
+        "all": {
+          "n_events": 359,
+          "n_detected": 193,
+          "event_sens": 0.5376044568245125,
+          "median_latency_s": -24.0,
+          "second_recall": 0.6019016122364613,
+          "n_seconds": 24190
+        },
+        "type/fnsz": {
+          "n_events": 152,
+          "n_detected": 75,
+          "event_sens": 0.4934210526315789,
+          "median_latency_s": -22.0,
+          "second_recall": 0.4482758620689655,
+          "n_seconds": 11919
+        },
+        "type/gnsz": {
+          "n_events": 108,
+          "n_detected": 85,
+          "event_sens": 0.7870370370370371,
+          "median_latency_s": -39.0,
+          "second_recall": 0.8048448893832654,
+          "n_seconds": 8091
+        },
+        "type/absz": {
+          "n_events": 49,
+          "n_detected": 1,
+          "event_sens": 0.02040816326530612,
+          "median_latency_s": -6.0,
+          "second_recall": 0.015151515151515152,
+          "n_seconds": 330
+        },
+        "type/cpsz": {
+          "n_events": 41,
+          "n_detected": 24,
+          "event_sens": 0.5853658536585366,
+          "median_latency_s": 5.5,
+          "second_recall": 0.7179968701095462,
+          "n_seconds": 3195
+        },
+        "type/tcsz": {
+          "n_events": 8,
+          "n_detected": 8,
+          "event_sens": 1.0,
+          "median_latency_s": -22.5,
+          "second_recall": 0.6601626016260163,
+          "n_seconds": 615
+        },
+        "type/tnsz": {
+          "n_events": 1,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 40
+        },
+        "group/focal": {
+          "n_events": 193,
+          "n_detected": 99,
+          "event_sens": 0.5129533678756477,
+          "median_latency_s": -8.0,
+          "second_recall": 0.5052931057297869,
+          "n_seconds": 15114
+        },
+        "group/generalized": {
+          "n_events": 166,
+          "n_detected": 94,
+          "event_sens": 0.5662650602409639,
+          "median_latency_s": -33.5,
+          "second_recall": 0.7627809607756721,
+          "n_seconds": 9076
+        },
+        "group/other": {
+          "n_events": 0
+        },
+        "duration/0-10s": {
+          "n_events": 50,
+          "n_detected": 1,
+          "event_sens": 0.02,
+          "median_latency_s": -6.0,
+          "second_recall": 0.01483679525222552,
+          "n_seconds": 337
+        },
+        "duration/10-30s": {
+          "n_events": 86,
+          "n_detected": 23,
+          "event_sens": 0.26744186046511625,
+          "median_latency_s": -43.0,
+          "second_recall": 0.2532998114393463,
+          "n_seconds": 1591
+        },
+        "duration/30-60s": {
+          "n_events": 72,
+          "n_detected": 53,
+          "event_sens": 0.7361111111111112,
+          "median_latency_s": -29.0,
+          "second_recall": 0.7176363082546452,
+          "n_seconds": 3283
+        },
+        "duration/60-180s": {
+          "n_events": 131,
+          "n_detected": 102,
+          "event_sens": 0.7786259541984732,
+          "median_latency_s": -16.0,
+          "second_recall": 0.6755559271024912,
+          "n_seconds": 11962
+        },
+        "duration/180-infs": {
+          "n_events": 20,
+          "n_detected": 14,
+          "event_sens": 0.7,
+          "median_latency_s": 43.0,
+          "second_recall": 0.5294285307111302,
+          "n_seconds": 7017
+        }
+      },
+      "linoss_mean": {
+        "all": {
+          "n_events": 359,
+          "n_detected": 108,
+          "event_sens": 0.3008356545961003,
+          "median_latency_s": 16.5,
+          "second_recall": 0.20024803637866886,
+          "n_seconds": 24190
+        },
+        "type/fnsz": {
+          "n_events": 152,
+          "n_detected": 38,
+          "event_sens": 0.25,
+          "median_latency_s": 34.0,
+          "second_recall": 0.12845037335346926,
+          "n_seconds": 11919
+        },
+        "type/gnsz": {
+          "n_events": 108,
+          "n_detected": 51,
+          "event_sens": 0.4722222222222222,
+          "median_latency_s": 11.0,
+          "second_recall": 0.2578173278951922,
+          "n_seconds": 8091
+        },
+        "type/absz": {
+          "n_events": 49,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 330
+        },
+        "type/cpsz": {
+          "n_events": 41,
+          "n_detected": 19,
+          "event_sens": 0.4634146341463415,
+          "median_latency_s": 17.0,
+          "second_recall": 0.38403755868544603,
+          "n_seconds": 3195
+        },
+        "type/tcsz": {
+          "n_events": 8,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 615
+        },
+        "type/tnsz": {
+          "n_events": 1,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 40
+        },
+        "group/focal": {
+          "n_events": 193,
+          "n_detected": 57,
+          "event_sens": 0.29533678756476683,
+          "median_latency_s": 26.0,
+          "second_recall": 0.1824798200344052,
+          "n_seconds": 15114
+        },
+        "group/generalized": {
+          "n_events": 166,
+          "n_detected": 51,
+          "event_sens": 0.3072289156626506,
+          "median_latency_s": 11.0,
+          "second_recall": 0.22983693256941384,
+          "n_seconds": 9076
+        },
+        "group/other": {
+          "n_events": 0
+        },
+        "duration/0-10s": {
+          "n_events": 50,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 337
+        },
+        "duration/10-30s": {
+          "n_events": 86,
+          "n_detected": 4,
+          "event_sens": 0.046511627906976744,
+          "median_latency_s": 6.5,
+          "second_recall": 0.039597737272155875,
+          "n_seconds": 1591
+        },
+        "duration/30-60s": {
+          "n_events": 72,
+          "n_detected": 29,
+          "event_sens": 0.4027777777777778,
+          "median_latency_s": 10.0,
+          "second_recall": 0.24824855315260433,
+          "n_seconds": 3283
+        },
+        "duration/60-180s": {
+          "n_events": 131,
+          "n_detected": 64,
+          "event_sens": 0.48854961832061067,
+          "median_latency_s": 18.0,
+          "second_recall": 0.25530847684333724,
+          "n_seconds": 11962
+        },
+        "duration/180-infs": {
+          "n_events": 20,
+          "n_detected": 11,
+          "event_sens": 0.55,
+          "median_latency_s": 49.0,
+          "second_recall": 0.12997007268063274,
+          "n_seconds": 7017
+        }
+      }
+    },
+    "ev2": {
+      "fused_mean": {
+        "all": {
+          "n_events": 359,
+          "n_detected": 230,
+          "event_sens": 0.6406685236768802,
+          "median_latency_s": -19.0,
+          "second_recall": 0.7906572964034725,
+          "n_seconds": 24190
+        },
+        "type/fnsz": {
+          "n_events": 152,
+          "n_detected": 100,
+          "event_sens": 0.6578947368421053,
+          "median_latency_s": -7.0,
+          "second_recall": 0.6951086500545348,
+          "n_seconds": 11919
+        },
+        "type/gnsz": {
+          "n_events": 108,
+          "n_detected": 95,
+          "event_sens": 0.8796296296296297,
+          "median_latency_s": -31.0,
+          "second_recall": 0.9370905944877024,
+          "n_seconds": 8091
+        },
+        "type/absz": {
+          "n_events": 49,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 330
+        },
+        "type/cpsz": {
+          "n_events": 41,
+          "n_detected": 27,
+          "event_sens": 0.6585365853658537,
+          "median_latency_s": -10.0,
+          "second_recall": 0.8657276995305164,
+          "n_seconds": 3195
+        },
+        "type/tcsz": {
+          "n_events": 8,
+          "n_detected": 8,
+          "event_sens": 1.0,
+          "median_latency_s": -17.5,
+          "second_recall": 0.8016260162601626,
+          "n_seconds": 615
+        },
+        "type/tnsz": {
+          "n_events": 1,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 40
+        },
+        "group/focal": {
+          "n_events": 193,
+          "n_detected": 127,
+          "event_sens": 0.6580310880829016,
+          "median_latency_s": -9.0,
+          "second_recall": 0.7311763927484451,
+          "n_seconds": 15114
+        },
+        "group/generalized": {
+          "n_events": 166,
+          "n_detected": 103,
+          "event_sens": 0.6204819277108434,
+          "median_latency_s": -27.0,
+          "second_recall": 0.8897091229616572,
+          "n_seconds": 9076
+        },
+        "group/other": {
+          "n_events": 0
+        },
+        "duration/0-10s": {
+          "n_events": 50,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 337
+        },
+        "duration/10-30s": {
+          "n_events": 86,
+          "n_detected": 26,
+          "event_sens": 0.3023255813953488,
+          "median_latency_s": -23.5,
+          "second_recall": 0.3331238214959145,
+          "n_seconds": 1591
+        },
+        "duration/30-60s": {
+          "n_events": 72,
+          "n_detected": 60,
+          "event_sens": 0.8333333333333334,
+          "median_latency_s": -29.0,
+          "second_recall": 0.8160219311605239,
+          "n_seconds": 3283
+        },
+        "duration/60-180s": {
+          "n_events": 131,
+          "n_detected": 124,
+          "event_sens": 0.9465648854961832,
+          "median_latency_s": -13.0,
+          "second_recall": 0.8695870255810065,
+          "n_seconds": 11962
+        },
+        "duration/180-infs": {
+          "n_events": 20,
+          "n_detected": 20,
+          "event_sens": 1.0,
+          "median_latency_s": 14.5,
+          "second_recall": 0.7859484110018526,
+          "n_seconds": 7017
+        }
+      },
+      "catboost": {
+        "all": {
+          "n_events": 359,
+          "n_detected": 227,
+          "event_sens": 0.6323119777158774,
+          "median_latency_s": -34.0,
+          "second_recall": 0.7375361719718893,
+          "n_seconds": 24190
+        },
+        "type/fnsz": {
+          "n_events": 152,
+          "n_detected": 93,
+          "event_sens": 0.6118421052631579,
+          "median_latency_s": -24.0,
+          "second_recall": 0.6128869871633527,
+          "n_seconds": 11919
+        },
+        "type/gnsz": {
+          "n_events": 108,
+          "n_detected": 94,
+          "event_sens": 0.8703703703703703,
+          "median_latency_s": -60.5,
+          "second_recall": 0.9120009887529353,
+          "n_seconds": 8091
+        },
+        "type/absz": {
+          "n_events": 49,
+          "n_detected": 4,
+          "event_sens": 0.08163265306122448,
+          "median_latency_s": -8.5,
+          "second_recall": 0.07878787878787878,
+          "n_seconds": 330
+        },
+        "type/cpsz": {
+          "n_events": 41,
+          "n_detected": 28,
+          "event_sens": 0.6829268292682927,
+          "median_latency_s": -6.0,
+          "second_recall": 0.8369327073552426,
+          "n_seconds": 3195
+        },
+        "type/tcsz": {
+          "n_events": 8,
+          "n_detected": 8,
+          "event_sens": 1.0,
+          "median_latency_s": -42.0,
+          "second_recall": 0.7430894308943089,
+          "n_seconds": 615
+        },
+        "type/tnsz": {
+          "n_events": 1,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 40
+        },
+        "group/focal": {
+          "n_events": 193,
+          "n_detected": 121,
+          "event_sens": 0.6269430051813472,
+          "median_latency_s": -16.0,
+          "second_recall": 0.6602487759693,
+          "n_seconds": 15114
+        },
+        "group/generalized": {
+          "n_events": 166,
+          "n_detected": 106,
+          "event_sens": 0.6385542168674698,
+          "median_latency_s": -51.5,
+          "second_recall": 0.8662406346408109,
+          "n_seconds": 9076
+        },
+        "group/other": {
+          "n_events": 0
+        },
+        "duration/0-10s": {
+          "n_events": 50,
+          "n_detected": 4,
+          "event_sens": 0.08,
+          "median_latency_s": -8.5,
+          "second_recall": 0.0771513353115727,
+          "n_seconds": 337
+        },
+        "duration/10-30s": {
+          "n_events": 86,
+          "n_detected": 31,
+          "event_sens": 0.36046511627906974,
+          "median_latency_s": -53.0,
+          "second_recall": 0.3727215587680704,
+          "n_seconds": 1591
+        },
+        "duration/30-60s": {
+          "n_events": 72,
+          "n_detected": 60,
+          "event_sens": 0.8333333333333334,
+          "median_latency_s": -46.5,
+          "second_recall": 0.8224185196466647,
+          "n_seconds": 3283
+        },
+        "duration/60-180s": {
+          "n_events": 131,
+          "n_detected": 116,
+          "event_sens": 0.8854961832061069,
+          "median_latency_s": -25.5,
+          "second_recall": 0.8175890319344591,
+          "n_seconds": 11962
+        },
+        "duration/180-infs": {
+          "n_events": 20,
+          "n_detected": 16,
+          "event_sens": 0.8,
+          "median_latency_s": 6.5,
+          "second_recall": 0.6757873735214479,
+          "n_seconds": 7017
+        }
+      },
+      "linoss_mean": {
+        "all": {
+          "n_events": 359,
+          "n_detected": 211,
+          "event_sens": 0.5877437325905293,
+          "median_latency_s": 9.0,
+          "second_recall": 0.5349731293923109,
+          "n_seconds": 24190
+        },
+        "type/fnsz": {
+          "n_events": 152,
+          "n_detected": 88,
+          "event_sens": 0.5789473684210527,
+          "median_latency_s": 13.0,
+          "second_recall": 0.4634616998070308,
+          "n_seconds": 11919
+        },
+        "type/gnsz": {
+          "n_events": 108,
+          "n_detected": 91,
+          "event_sens": 0.8425925925925926,
+          "median_latency_s": 5.0,
+          "second_recall": 0.6117908787541713,
+          "n_seconds": 8091
+        },
+        "type/absz": {
+          "n_events": 49,
+          "n_detected": 2,
+          "event_sens": 0.04081632653061224,
+          "median_latency_s": -2.5,
+          "second_recall": 0.024242424242424242,
+          "n_seconds": 330
+        },
+        "type/cpsz": {
+          "n_events": 41,
+          "n_detected": 26,
+          "event_sens": 0.6341463414634146,
+          "median_latency_s": 9.5,
+          "second_recall": 0.6816901408450704,
+          "n_seconds": 3195
+        },
+        "type/tcsz": {
+          "n_events": 8,
+          "n_detected": 4,
+          "event_sens": 0.5,
+          "median_latency_s": 14.0,
+          "second_recall": 0.45691056910569106,
+          "n_seconds": 615
+        },
+        "type/tnsz": {
+          "n_events": 1,
+          "n_detected": 0,
+          "event_sens": 0.0,
+          "median_latency_s": null,
+          "second_recall": 0.0,
+          "n_seconds": 40
+        },
+        "group/focal": {
+          "n_events": 193,
+          "n_detected": 114,
+          "event_sens": 0.5906735751295337,
+          "median_latency_s": 12.0,
+          "second_recall": 0.5095937541352389,
+          "n_seconds": 15114
+        },
+        "group/generalized": {
+          "n_events": 166,
+          "n_detected": 97,
+          "event_sens": 0.5843373493975904,
+          "median_latency_s": 5.0,
+          "second_recall": 0.5772366681357426,
+          "n_seconds": 9076
+        },
+        "group/other": {
+          "n_events": 0
+        },
+        "duration/0-10s": {
+          "n_events": 50,
+          "n_detected": 2,
+          "event_sens": 0.04,
+          "median_latency_s": -2.5,
+          "second_recall": 0.02373887240356083,
+          "n_seconds": 337
+        },
+        "duration/10-30s": {
+          "n_events": 86,
+          "n_detected": 19,
+          "event_sens": 0.22093023255813954,
+          "median_latency_s": 2.0,
+          "second_recall": 0.20301697045883094,
+          "n_seconds": 1591
+        },
+        "duration/30-60s": {
+          "n_events": 72,
+          "n_detected": 56,
+          "event_sens": 0.7777777777777778,
+          "median_latency_s": 3.5,
+          "second_recall": 0.605239110569601,
+          "n_seconds": 3283
+        },
+        "duration/60-180s": {
+          "n_events": 131,
+          "n_detected": 114,
+          "event_sens": 0.8702290076335878,
+          "median_latency_s": 11.0,
+          "second_recall": 0.5829292760407958,
+          "n_seconds": 11962
+        },
+        "duration/180-infs": {
+          "n_events": 20,
+          "n_detected": 20,
+          "event_sens": 1.0,
+          "median_latency_s": 37.0,
+          "second_recall": 0.5201653128117429,
+          "n_seconds": 7017
+        }
+      }
+    }
+  }
+}
