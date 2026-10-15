@@ -1,0 +1,51 @@
+{
+  "provenance": {
+    "git_commit": "33c97c9719128f98439c34d7e8ad71c6f32151cd",
+    "date": "2026-10-15 16:20",
+    "command": "python -m szfusion.eval.mechanism --fusion_1s <work>/s1_gate/fusion_1s --out results/tusz/fusion_mechanism.json --source s1_gate",
+    "source": "s1_gate"
+  },
+  "inputs": {
+    "tracks": "eval_tracks.npz (1 s fusion stage, eval)",
+    "catboost": "catboost",
+    "linoss": "linoss_mean (5-seed mean)",
+    "fusion": "fused_mean",
+    "scored_seconds": 459255,
+    "ictal_seconds": 24190,
+    "background_seconds": 435065
+  },
+  "logit_correlation": {
+    "rho_background": 0.49787377219726103,
+    "rho_ictal": 0.47789761564329536
+  },
+  "false_alarm_seconds_at_dev_f1_threshold": {
+    "thr_catboost": 0.6430929005146027,
+    "thr_linoss": 0.6940688259516451,
+    "n_fa_catboost": 15478,
+    "n_fa_linoss": 1294,
+    "n_fa_both": 410,
+    "share_cb_fa_also_linoss": 0.02648921049231167,
+    "share_linoss_fa_also_cb": 0.3168469860896445
+  },
+  "ictal_caught_at_1pct_background": {
+    "catboost": {
+      "thr": 0.752764105796814,
+      "ictal_frac": 0.44526663910706904,
+      "background_frac_above": 0.009996207463252617
+    },
+    "linoss_mean": {
+      "thr": 0.51328390598297,
+      "ictal_frac": 0.474286895411327,
+      "background_frac_above": 0.01000080447749187
+    },
+    "fused_mean": {
+      "thr": 0.15735627651214598,
+      "ictal_frac": 0.6361719718892104,
+      "background_frac_above": 0.01000080447749187
+    }
+  },
+  "separation_gain_sqrt_2_over_1_plus_rho": {
+    "at_rho_background": 1.1555197949080571,
+    "at_rho_ictal": 1.1633029344178984
+  }
+}
