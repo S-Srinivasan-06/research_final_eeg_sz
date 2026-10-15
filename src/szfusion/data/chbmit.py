@@ -9,8 +9,10 @@ Channels: the 22 bipolar channels of the HyBrain code (github.com/hhyy0401/seizu
 src/data/constants_chb.py INCLUDED_CHANNELS_CHB), in their order. Labels are matched after strip().upper(), and for a
 duplicated label (T8-P8 appears twice in CHB-MIT EDFs) the first occurrence is used. A recording that misses any of
 the 22 channels is skipped (the authors flag it as failed; e.g. chb12 files recorded with another reference).
-Note: P7-T7 is the sign-inverted T7-P7, and FT9-FT10 is the only transverse channel. Log-magnitude spectra are
-sign-invariant, so P7-T7 carries the same tokens as T7-P7. We keep it to match the authors' input exactly.
+Note: in the EDFs P7-T7 is the sign-inverted T7-P7. Measured on chb01_03: correlation -1.000, and |T7-P7 + P7-T7|
+<= 0.39 µV (one quantisation step), against a signal amplitude of about 314 µV. Log-magnitude spectra are
+sign-invariant, so its tokens are nearly, but not bit-exactly, those of T7-P7. We keep it to match the authors'
+input. FT9-FT10 is the only transverse channel.
 Annotations: summary.txt gives, per file, "Seizure [n] Start Time: <s> seconds" / "... End Time: <s> seconds".
 A second is labelled 1 if it overlaps a seizure: [floor(start), ceil(end)).
 Tokens: the same per-second features as on TUSZ (tokens.py): FFT resampling 256 -> 200 Hz, 1 s steps,

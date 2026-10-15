@@ -8,7 +8,7 @@
   "enable_gpu": true,
   "enable_tpu": false,
   "enable_internet": true,
-  "dataset_sources": ["<OWNER>/szfusion-code", "<OWNER>/szfusion-tokens-tusz-train", "<OWNER>/szfusion-tokens-tusz-dev-eval"],
+  "dataset_sources": ["<OWNER>/szfusion-code", "<TOKENS_TRAIN>", "<TOKENS_DEV_EVAL>"],
   "competition_sources": [],
   "kernel_sources": [],
   "model_sources": []

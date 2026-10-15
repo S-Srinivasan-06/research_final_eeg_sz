@@ -69,7 +69,15 @@ def dataset(name):
 def kernel(name):
     src = REPO / "kaggle" / name; d = STAGE / f"kernel_{name}"; shutil.rmtree(d, ignore_errors=True)
     shutil.copytree(src, d)
-    m = d / "kernel-metadata.json"; m.write_text(m.read_text().replace("<OWNER>", OWNER))
+    m = d / "kernel-metadata.json"
+    txt = m.read_text().replace("<OWNER>", OWNER)
+    # token datasets: default = this account's szfusion-tokens-tusz-*; override with any bit-identical store
+    txt = txt.replace("<TOKENS_TRAIN>", os.environ.get("TOKENS_TRAIN", f"{OWNER}/szfusion-tokens-tusz-train"))
+    txt = txt.replace("<TOKENS_DEV_EVAL>", os.environ.get("TOKENS_DEV_EVAL", f"{OWNER}/szfusion-tokens-tusz-dev-eval"))
+    txt = txt.replace("<GROUP>", os.environ.get("GROUP", "a"))
+    m.write_text(txt)
+    k = d / "run_kernel.py"
+    k.write_text(k.read_text(encoding="utf-8").replace("<PATIENTS>", os.environ.get("PATIENTS", "")), encoding="utf-8")
     subprocess.run(CLI + ["kernels", "push", "-p", str(d)], check=True)
 
 
