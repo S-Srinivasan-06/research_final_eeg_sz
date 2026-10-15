@@ -1,12 +1,75 @@
 {
  "source": "Kaggle run logs (run.log 'time by stage' tables, events.jsonl gpu_peak_gb) of szfusion-linoss-tusz and szfusion-chbmit-linoss (Tesla T4), szfusion-chbmit-catboost (score.log, train_summary.json); local CHB-MIT builder timing (PROGRESS C1 check)",
- "linoss_train_s_per_epoch": {"tusz": {"median": 28.1, "iqr": [27.5, 28.5], "epoch": "6,000 segments x 240 s, batch 32", "n_epochs": 86},
-                              "chbmit": {"median": 10.7, "iqr": [10.1, 11.4], "epoch": "6,000 clips x 12 s, batch 32", "n_epochs": 118}},
- "linoss_gpu_peak_MB": {"tusz": 777, "chbmit": 201},
- "linoss_inference_ms_per_12s": {"chbmit": {"value": 0.089, "how": "final_test_forward 3.62 s / 40,676 clips, batch 512, T4"},
-                                 "tusz": {"value": 0.145, "how": "final_eval_forward 5.59 s / (462,818 s / 12); 240 s windows every 120 s, batch 64, T4"}},
- "catboost": {"train_total_s_chbmit": 900.6, "committee": "20 base + 10 sens, GPU T4", "inference_ms_per_12s_clip": 0.057,
-              "inference_how": "30 models, 2.3 s / 40,676 test clips, 4 CPU cores, precomputed features"},
- "feature_extraction_ms_per_12s_clip": {"value": 66.7, "how": "tokens + 588 CatBoost features, 20 s per recorded hour on one CPU core (chb01_03)"},
- "memory_cost_vs_hybrain_332.2MB": {"chbmit": 0.61, "tusz": 2.34}
+ "linoss_train_s_per_epoch": {
+  "tusz": {
+   "median": 28.1,
+   "iqr": [
+    27.5,
+    28.5
+   ],
+   "epoch": "6,000 segments x 240 s, batch 32",
+   "n_epochs": 86
+  },
+  "chbmit": {
+   "median": 10.7,
+   "iqr": [
+    10.1,
+    11.4
+   ],
+   "epoch": "6,000 clips x 12 s, batch 32",
+   "n_epochs": 118
+  }
+ },
+ "linoss_gpu_peak_MB": {
+  "tusz": 777,
+  "chbmit": 201
+ },
+ "linoss_inference_ms_per_12s": {
+  "chbmit": {
+   "value": 0.089,
+   "how": "final_test_forward 3.62 s / 40,676 clips, batch 512, T4"
+  },
+  "tusz": {
+   "value": 0.145,
+   "how": "final_eval_forward 5.59 s / (462,818 s / 12); 240 s windows every 120 s, batch 64, T4"
+  }
+ },
+ "catboost": {
+  "train_total_s_chbmit": 900.6,
+  "committee": "20 base + 10 sens, GPU T4",
+  "inference_ms_per_12s_clip": 0.057,
+  "inference_how": "30 models, 2.3 s / 40,676 test clips, 4 CPU cores, precomputed features"
+ },
+ "feature_extraction_ms_per_12s_clip": {
+  "value": 66.7,
+  "how": "tokens + 588 CatBoost features, 20 s per recorded hour on one CPU core (chb01_03)"
+ },
+ "memory_cost_vs_hybrain_332.2MB": {
+  "chbmit": 0.61,
+  "tusz": 2.34
+ },
+ "tusz_60s_table": {
+  "segment": "one 60 s window of the 60 s test (28,067 eval windows)",
+  "train_s_per_epoch": 28.1,
+  "gpu_peak_MB": 777,
+  "memory_cost_vs_hybrain_332.2MB": 2.34,
+  "inference_ms_per_segment": {
+   "total_5seed_system": 6.45,
+   "single_seed_system": 5.38,
+   "linoss_backbone_per_seed": {
+    "value": 0.199,
+    "how": "final_eval_forward 5.59 s / 28,067 windows (T4, 240 s windows every 120 s)"
+   },
+   "overlooker_per_seed": {
+    "value": 0.071,
+    "how": "~2.0 s per seed / 28,067 windows (CPU, incl. reading the embeddings)"
+   },
+   "catboost_committee": {
+    "value": 5.106,
+    "how": "143.3 s / 28,067 windows: 50 models + \u00b17 context statistics, 6 CPU threads (development scoring log)"
+   }
+  },
+  "excluded": "feature extraction (EDF -> tokens and 588 CatBoost features), CPU",
+  "catboost_training": "not epoch-based; the TUSZ committee (50 models, Optuna for sens) trained in two Kaggle GPU sessions; session 2 took 126.7 min, session 1 was not timed"
+ }
 }
