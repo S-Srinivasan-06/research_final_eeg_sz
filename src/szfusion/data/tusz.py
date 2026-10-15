@@ -44,7 +44,7 @@ class Recording:
     patient: str
     session: str
     montage_dir: str
-    rec_id: str                 # bname, e.g. aaaaaaac_s001_t000 (unique across the corpus)
+    rec_id: str                 # bname <patient>_s<session>_t<token> (unique across the corpus)
     edf_path: str
     csv_path: str
     csv_bi_path: str
