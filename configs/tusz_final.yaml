@@ -1,0 +1,71 @@
+# Final TUSZ configuration (path.md 4). Every value is commented with its source.
+# [M] = Zabihi et al. 2026 Methods; [GH] = their repository; [DEFAULT] = unspecified there, our choice; [ADAPT] = our change.
+catboost:
+  #       [DEFAULT]=unspecified in paper+repo (spec [UNSPECIFIED]) -> our choice.
+  seed: 0
+  data:
+    root: null                 # null -> configs/paths.yaml tusz_root (TUSZ v2.0.6)             [ADAPT: paper v2.0.3]
+    montage_dirs: null         # all 4 montage dirs
+    fs: 200                    # [M; GH preprocess:369]
+    notch_hz: 60               # iirnotch, filtfilt                                          [GH preprocess:390-392]
+    notch_q: 30.0              # [GH preprocess:390]
+    hp_hz: 0.5                 # Butterworth order 1, sosfiltfilt                           [GH preprocess:396-400]
+    hp_order: 1
+    lp_hz: 35                  # Butterworth order 4, sosfiltfilt                           [GH preprocess:397-403]
+    lp_order: 4
+    scale: 1.0e-6              # uV -> V                                                     [GH preprocess:197-200]
+    win_sec: 60                # [M; GH preprocess:273-274]
+    stride_sec: 15
+    label_abs_sec: 9.0         # positive iff overlap >= min(0.15*60 s, 0.20*seizure dur)    [GH preprocess:263-264,299-309]
+    label_frac: 0.20
+  features:                    # PARTIAL port of [GH fxpipeline.py]; see features.py docstring for omitted families
+    welch_sec: 4               # nperseg = max(256, min(L, 4*fs))                            [GH fxpipeline.py]
+    total_range: [0.5, 30]     # relative-power denominator                                  [DEFAULT]
+    subwin_sec: 5              # [GH five_sec_subwindow_temporal_features]
+    wavelet: db4               # [GH WAVELET]; level [DEFAULT] 5 (repo: _choose_level -> fs/2^(J+1) <= 1 Hz)
+    wavelet_level: 5
+    plv: true
+  extract:
+    chunk_windows: 64          # windows per feature batch (memory)                          [ADAPT]
+  context:
+    mode: zabihi               # 11 stats per base feature                                   [GH infer.py:151-298]
+    k: 7                       # +-7 windows, per file, non-causal                           [M; GH]
+  train:
+    neg_ratio: null            # no resampling                                              [M]
+    neg_fraction: null
+    n_folds: 10                # GroupKFold by patient on TRAIN                              [M]
+    class_weight_clamp: [1.0, 20.0]  # inverse-frequency pos weight, clamped                 [M; clamp DEFAULT]
+    early_stopping_rounds: 200 # on the held-out train fold                                  [DEFAULT]
+  ensemble:
+    members:                   # equal-weight mean of the 3 committee means                  [M; GH infer.py ~L770-843]
+      base: {features: base, repeats: 2}   # 2 x 10 folds = 20
+      full: {features: full, repeats: 2}   # 2 x 10 = 20
+      sens: {features: full, repeats: 1, optuna: true}  # 1 x 10, Optuna max sens@0.5 [M]
+    optuna_trials: 50          # [DEFAULT]
+  model:
+    params:                    # all [DEFAULT]; recoverable via CatBoost.get_all_params() on released .cbm
+      iterations: 2000
+      learning_rate: 0.05
+      depth: 6
+      l2_leaf_reg: 3
+      loss_function: Logloss
+      eval_metric: Logloss
+      verbose: 200
+      thread_count: -1
+  postprocess:
+    repo:                      # authors' frozen policy                                    [GH event_params.json, best_threshold.txt]
+      threshold: 0.44
+      smooth_sec: 30.0         # k = round(30/15)=2 -> forced odd = 3 windows (matches paper's 3) [GH infer.py:370-381,521]
+      dilate_sec: 20.0         # radius ceil(20/15) = 2 windows                              [GH infer.py:525]
+      merge_gap_sec: 40.0
+      min_pred_event_sec: 10.0
+      min_event_overlap_sec: 10.0
+    spec_min: 0.93             # dev constraints                                             [M]
+    fa_h_max: 0.69
+    grid:                      # grid values [DEFAULT]
+      threshold: [0.30, 0.35, 0.40, 0.44, 0.50, 0.55, 0.60, 0.65, 0.70]
+      smooth_sec: [15.0, 30.0, 45.0]
+      dilate_sec: [0.0, 20.0, 30.0]
+      merge_gap_sec: [20.0, 40.0, 60.0]
+      min_event_overlap_sec: [10.0]
+      min_pred_event_sec: [10.0]

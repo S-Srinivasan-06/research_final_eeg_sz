@@ -1,0 +1,10 @@
+[project]
+name = "szfusion"
+version = "1.0.0"
+description = "CatBoost x LinOSS fusion for EEG seizure detection (TUSZ v2.0.6, CHB-MIT)"
+requires-python = ">=3.11"
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+[tool.setuptools.packages.find]
+where = ["src"]

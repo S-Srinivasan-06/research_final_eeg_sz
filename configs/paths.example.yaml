@@ -1,0 +1,6 @@
+# Copy to configs/paths.yaml (git-ignored) and edit. The only place where machine-specific locations live (RULES.md 5).
+# Every key can also be set by an environment variable SZF_<KEY upper-case>, e.g. SZF_TUSZ_ROOT.
+tusz_root: /data/TUSZ/v2.0.6          # contains edf/{train,dev,eval}/<patient>/<session>/<montage>/*.edf|.csv|.csv_bi
+chbmit_root: /data/chb-mit/1.0.0      # contains chb01 ... chb22 (PhysioNet layout)
+work_dir: /data/szfusion_work         # all derived data, models and per-recording outputs (never committed)
+dev_run_dir: null                     # optional: development-run artefacts used only by the S1 reproduction gate
