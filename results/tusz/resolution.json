@@ -1,0 +1,1187 @@
+{
+  "provenance": {
+    "git_commit": "f69793116204b95a56f231f182e22a518817932b",
+    "date": "2026-10-15 17:34",
+    "command": "python -m szfusion.eval.resolution --out results/tusz/resolution.json",
+    "config_sha256": "c2c637947b745907a17fde961f5b63a0c8285526ea5ce22a0b2a2a36ba798d5f",
+    "source": {
+      "1s": "official",
+      "12s": "official",
+      "60s": "s1_gate"
+    },
+    "inputs": "<work>/{tusz|s1_gate}/{fusion_1s,u12,u60}, <work>/tokens/tusz, <work>/tusz/catboost, LinOSS runs s0-s4 (prob_dev.npy), cb_feats, markers/tusz"
+  },
+  "sources": {
+    "1s": "official",
+    "12s": "official",
+    "60s": "s1_gate"
+  },
+  "c_counts": {
+    "1s": {
+      "units": 459255,
+      "positives": 24190,
+      "prevalence": 0.05267226268630717,
+      "unit": "scored second",
+      "label": "any overlap with a .csv_bi seizure (y_sec)"
+    },
+    "12s": {
+      "units": 38384,
+      "positives": 2340,
+      "prevalence": 0.06096290120883702,
+      "unit": "HyBrain 12 s clip",
+      "label": "HyBrain list label (any seizure second)",
+      "label_vs_1s_label_agreement": 1.0
+    },
+    "60s": {
+      "units": 28067,
+      "positives": 2407,
+      "prevalence": 0.08575907649552855,
+      "unit": "60 s window, stride 15 s",
+      "label": "overlap >= min(9 s, 20 % of the seizure)",
+      "windows_per_second_max": 4,
+      "label_vs_any_ictal_second_agreement": 0.9913777746107528
+    },
+    "eval_store_seizures": 360,
+    "seizure_duration_s_quantiles_0_25_50_75_100": [
+      4.0,
+      17.0,
+      50.0,
+      75.25,
+      1162.0
+    ]
+  },
+  "a_label_definition": {
+    "descriptive": true,
+    "1s": {
+      "definition": "pos_full = interior ictal seconds; pos_boundary = first/last second of an annotated seizure (the only seconds an any-overlap label can mark while partly ictal)",
+      "positive_boundary_share": 0.02922695328648202,
+      "models": {
+        "fusion": {
+          "pos_full": {
+            "n": 23483,
+            "frac_above_thr": 0.5818677341055232,
+            "median_prob": 0.2324432134628296,
+            "auroc_vs_pure_background": 0.9648118573431219
+          },
+          "pos_boundary": {
+            "n": 707,
+            "frac_above_thr": 0.19943422913719944,
+            "median_prob": 0.07119797170162201,
+            "auroc_vs_pure_background": 0.8906815384086959
+          },
+          "pos_no_ictal_second": {
+            "n": 0
+          },
+          "neg_pure": {
+            "n": 435065,
+            "frac_above_thr": 0.0065829243906083,
+            "median_prob": 0.0021187858656048775
+          },
+          "neg_subthreshold": {
+            "n": 0
+          },
+          "neg_pure_near": {
+            "n": 30196,
+            "frac_above_thr": 0.057822228109683405,
+            "median_prob": 0.017521899193525314,
+            "auroc_vs_pure_background": 0.7642729631833888
+          },
+          "neg_pure_far": {
+            "n": 404869,
+            "frac_above_thr": 0.0027613870165411527,
+            "median_prob": 0.001826831023208797
+          },
+          "clean_units_only": {
+            "n": 458548,
+            "auroc": 0.9648118573431219,
+            "auprc": 0.7527499105999336,
+            "note": "fully ictal positives vs pure background only (boundary and sub-threshold units removed); DESCRIPTIVE"
+          },
+          "without_subthreshold_negatives": {
+            "n": 459255,
+            "auroc": 0.9626452539745135,
+            "auprc": 0.7481087612553416
+          }
+        },
+        "catboost": {
+          "pos_full": {
+            "n": 23483,
+            "frac_above_thr": 0.6627347442830984,
+            "median_prob": 0.7296406030654907,
+            "auroc_vs_pure_background": 0.9494918717286266
+          },
+          "pos_boundary": {
+            "n": 707,
+            "frac_above_thr": 0.4582743988684583,
+            "median_prob": 0.6205941438674927,
+            "auroc_vs_pure_background": 0.8828635955826464
+          },
+          "pos_no_ictal_second": {
+            "n": 0
+          },
+          "neg_pure": {
+            "n": 435065,
+            "frac_above_thr": 0.03557629319756818,
+            "median_prob": 0.18981796503067017
+          },
+          "neg_subthreshold": {
+            "n": 0
+          },
+          "neg_pure_near": {
+            "n": 30196,
+            "frac_above_thr": 0.30292091667770565,
+            "median_prob": 0.5043127536773682,
+            "auroc_vs_pure_background": 0.8229280521051743
+          },
+          "neg_pure_far": {
+            "n": 404869,
+            "frac_above_thr": 0.015637156709948155,
+            "median_prob": 0.17375525832176208
+          },
+          "clean_units_only": {
+            "n": 458548,
+            "auroc": 0.9494918717286266,
+            "auprc": 0.6068602899181542,
+            "note": "fully ictal positives vs pure background only (boundary and sub-threshold units removed); DESCRIPTIVE"
+          },
+          "without_subthreshold_negatives": {
+            "n": 459255,
+            "auroc": 0.9475445302141492,
+            "auprc": 0.6066353398033514
+          }
+        },
+        "linoss": {
+          "pos_full": {
+            "n": 23483,
+            "frac_above_thr": 0.22697270365796535,
+            "median_prob": 0.5042307376861572,
+            "auroc_vs_pure_background": 0.9414776058875323
+          },
+          "pos_boundary": {
+            "n": 707,
+            "frac_above_thr": 0.021216407355021217,
+            "median_prob": 0.1906021684408188,
+            "auroc_vs_pure_background": 0.8231228255720329
+          },
+          "pos_no_ictal_second": {
+            "n": 0
+          },
+          "neg_pure": {
+            "n": 435065,
+            "frac_above_thr": 0.002974268212795789,
+            "median_prob": 0.040706440806388855
+          },
+          "neg_subthreshold": {
+            "n": 0
+          },
+          "neg_pure_near": {
+            "n": 30196,
+            "frac_above_thr": 0.005265598092462578,
+            "median_prob": 0.06315980106592178,
+            "auroc_vs_pure_background": 0.6018380157646623
+          },
+          "neg_pure_far": {
+            "n": 404869,
+            "frac_above_thr": 0.002803375906774784,
+            "median_prob": 0.039652496576309204
+          },
+          "clean_units_only": {
+            "n": 458548,
+            "auroc": 0.9414776058875323,
+            "auprc": 0.617522310454082,
+            "note": "fully ictal positives vs pure background only (boundary and sub-threshold units removed); DESCRIPTIVE"
+          },
+          "without_subthreshold_negatives": {
+            "n": 459255,
+            "auroc": 0.9380184562520195,
+            "auprc": 0.6119768335116629
+          }
+        }
+      }
+    },
+    "12s": {
+      "positive_boundary_share": 0.27136752136752135,
+      "positive_full_share": 0.7286324786324786,
+      "negatives_with_ictal_seconds_share": 0.0,
+      "ictal_fraction_of_positive_units_quantiles_0_25_50_75_100": [
+        0.08333333333333333,
+        0.9166666666666666,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "group_counts": {
+        "neg_pure_near": 2365,
+        "neg_pure_far": 33679,
+        "pos_full": 1705,
+        "pos_boundary": 635,
+        "pos_no_ictal_second": 0,
+        "neg_pure": 36044,
+        "neg_subthreshold": 0
+      },
+      "models": {
+        "fusion": {
+          "neg_pure_near": {
+            "n": 2365,
+            "frac_above_thr": 0.04947145877378435,
+            "median_prob": 0.016006732229964644,
+            "auroc_vs_pure_background": 0.7432739653648595
+          },
+          "neg_pure_far": {
+            "n": 33679,
+            "frac_above_thr": 0.0025535199976246324,
+            "median_prob": 0.0018890498061029165
+          },
+          "pos_full": {
+            "n": 1705,
+            "frac_above_thr": 0.6111436950146627,
+            "median_prob": 0.30743775235155,
+            "auroc_vs_pure_background": 0.9764421523253919
+          },
+          "pos_boundary": {
+            "n": 635,
+            "frac_above_thr": 0.2929133858267717,
+            "median_prob": 0.10564118161382759,
+            "auroc_vs_pure_background": 0.8864809152767789
+          },
+          "pos_no_ictal_second": {
+            "n": 0
+          },
+          "neg_pure": {
+            "n": 36044,
+            "frac_above_thr": 0.005632005326822772,
+            "median_prob": 0.0021409524116738354
+          },
+          "neg_subthreshold": {
+            "n": 0
+          },
+          "clean_units_only": {
+            "n": 37749,
+            "auroc": 0.9764421523253919,
+            "auprc": 0.7875318808012175,
+            "note": "fully ictal positives vs pure background only (boundary and sub-threshold units removed); DESCRIPTIVE"
+          },
+          "without_subthreshold_negatives": {
+            "n": 38384,
+            "auroc": 0.9520295944083536,
+            "auprc": 0.746551203967708
+          }
+        },
+        "catboost": {
+          "neg_pure_near": {
+            "n": 2365,
+            "frac_above_thr": 0.2718816067653277,
+            "median_prob": 0.48277301341295237,
+            "auroc_vs_pure_background": 0.8140360454441049
+          },
+          "neg_pure_far": {
+            "n": 33679,
+            "frac_above_thr": 0.014964814869800173,
+            "median_prob": 0.17279688268899915
+          },
+          "pos_full": {
+            "n": 1705,
+            "frac_above_thr": 0.6868035190615835,
+            "median_prob": 0.7419153898954391,
+            "auroc_vs_pure_background": 0.9610410752449514
+          },
+          "pos_boundary": {
+            "n": 635,
+            "frac_above_thr": 0.4645669291338583,
+            "median_prob": 0.6223175220725927,
+            "auroc_vs_pure_background": 0.882396668289064
+          },
+          "pos_no_ictal_second": {
+            "n": 0
+          },
+          "neg_pure": {
+            "n": 36044,
+            "frac_above_thr": 0.031822217289978916,
+            "median_prob": 0.18707612494914408
+          },
+          "neg_subthreshold": {
+            "n": 0
+          },
+          "clean_units_only": {
+            "n": 37749,
+            "auroc": 0.9610410752449514,
+            "auprc": 0.641627437264827,
+            "note": "fully ictal positives vs pure background only (boundary and sub-threshold units removed); DESCRIPTIVE"
+          },
+          "without_subthreshold_negatives": {
+            "n": 38384,
+            "auroc": 0.9396995374599137,
+            "auprc": 0.6365120349264758
+          }
+        },
+        "linoss": {
+          "neg_pure_near": {
+            "n": 2365,
+            "frac_above_thr": 0.02156448202959831,
+            "median_prob": 0.052220545138544926,
+            "auroc_vs_pure_background": 0.6086506203482096
+          },
+          "neg_pure_far": {
+            "n": 33679,
+            "frac_above_thr": 0.00338489860150242,
+            "median_prob": 0.025254823724007624
+          },
+          "pos_full": {
+            "n": 1705,
+            "frac_above_thr": 0.46510263929618767,
+            "median_prob": 0.7123625317105211,
+            "auroc_vs_pure_background": 0.9662066174577764
+          },
+          "pos_boundary": {
+            "n": 635,
+            "frac_above_thr": 0.14015748031496064,
+            "median_prob": 0.3329005134001169,
+            "auroc_vs_pure_background": 0.8438075685273554
+          },
+          "pos_no_ictal_second": {
+            "n": 0
+          },
+          "neg_pure": {
+            "n": 36044,
+            "frac_above_thr": 0.004577738319831317,
+            "median_prob": 0.026252420870323374
+          },
+          "neg_subthreshold": {
+            "n": 0
+          },
+          "clean_units_only": {
+            "n": 37749,
+            "auroc": 0.9662066174577764,
+            "auprc": 0.7257990153904393,
+            "note": "fully ictal positives vs pure background only (boundary and sub-threshold units removed); DESCRIPTIVE"
+          },
+          "without_subthreshold_negatives": {
+            "n": 38384,
+            "auroc": 0.9329914909317861,
+            "auprc": 0.6792177938885977
+          }
+        }
+      }
+    },
+    "60s": {
+      "positive_boundary_share": 0.7179061071873701,
+      "positive_full_share": 0.2820938928126298,
+      "negatives_with_ictal_seconds_share": 0.009431021044427125,
+      "ictal_fraction_of_positive_units_quantiles_0_25_50_75_100": [
+        0.05,
+        0.35,
+        0.6333333333333333,
+        1.0,
+        1.0
+      ],
+      "group_counts": {
+        "neg_pure_near": 1452,
+        "neg_pure_far": 23966,
+        "pos_full": 679,
+        "pos_boundary": 1728,
+        "pos_no_ictal_second": 0,
+        "neg_pure": 25418,
+        "neg_subthreshold": 242
+      },
+      "models": {
+        "fusion": {
+          "neg_pure_near": {
+            "n": 1452,
+            "frac_above_thr": 0.03856749311294766,
+            "median_prob": 0.014220856467738257,
+            "auroc_vs_pure_background": 0.6915148957366714
+          },
+          "neg_pure_far": {
+            "n": 23966,
+            "frac_above_thr": 0.003338062254861053,
+            "median_prob": 0.0031393659598778446
+          },
+          "pos_full": {
+            "n": 679,
+            "frac_above_thr": 0.6421207658321061,
+            "median_prob": 0.3385543011813682,
+            "auroc_vs_pure_background": 0.986649784093028
+          },
+          "pos_boundary": {
+            "n": 1728,
+            "frac_above_thr": 0.5046296296296297,
+            "median_prob": 0.2775702115553491,
+            "auroc_vs_pure_background": 0.922296539817219
+          },
+          "pos_no_ictal_second": {
+            "n": 0
+          },
+          "neg_pure": {
+            "n": 25418,
+            "frac_above_thr": 0.005350538988118656,
+            "median_prob": 0.0034774378543569818
+          },
+          "neg_subthreshold": {
+            "n": 242,
+            "frac_above_thr": 0.10330578512396695,
+            "median_prob": 0.07321324305355031,
+            "auroc_vs_pure_background": 0.856153867663249
+          },
+          "clean_units_only": {
+            "n": 26097,
+            "auroc": 0.986649784093028,
+            "auprc": 0.7151149087380977,
+            "note": "fully ictal positives vs pure background only (boundary and sub-threshold units removed); DESCRIPTIVE"
+          },
+          "without_subthreshold_negatives": {
+            "n": 27825,
+            "auroc": 0.9404501970101041,
+            "auprc": 0.7770176887789972
+          }
+        },
+        "catboost": {
+          "neg_pure_near": {
+            "n": 1452,
+            "frac_above_thr": 0.10261707988980716,
+            "median_prob": 0.36702631413936615,
+            "auroc_vs_pure_background": 0.7444686548891515
+          },
+          "neg_pure_far": {
+            "n": 23966,
+            "frac_above_thr": 0.00988900943002587,
+            "median_prob": 0.1697327271103859
+          },
+          "pos_full": {
+            "n": 679,
+            "frac_above_thr": 0.614138438880707,
+            "median_prob": 0.7308709025382996,
+            "auroc_vs_pure_background": 0.9762281863733226
+          },
+          "pos_boundary": {
+            "n": 1728,
+            "frac_above_thr": 0.5243055555555556,
+            "median_prob": 0.6908133924007416,
+            "auroc_vs_pure_background": 0.9104622334930336
+          },
+          "pos_no_ictal_second": {
+            "n": 0
+          },
+          "neg_pure": {
+            "n": 25418,
+            "frac_above_thr": 0.015186088598630892,
+            "median_prob": 0.17953212559223175
+          },
+          "neg_subthreshold": {
+            "n": 242,
+            "frac_above_thr": 0.2024793388429752,
+            "median_prob": 0.5127784907817841,
+            "auroc_vs_pure_background": 0.8412266734903163
+          },
+          "clean_units_only": {
+            "n": 26097,
+            "auroc": 0.9762281863733226,
+            "auprc": 0.6401992531094626,
+            "note": "fully ictal positives vs pure background only (boundary and sub-threshold units removed); DESCRIPTIVE"
+          },
+          "without_subthreshold_negatives": {
+            "n": 27825,
+            "auroc": 0.9290144071555662,
+            "auprc": 0.7235233654316032
+          }
+        },
+        "linoss": {
+          "neg_pure_near": {
+            "n": 1452,
+            "frac_above_thr": 0.026859504132231406,
+            "median_prob": 0.05110675737447816,
+            "auroc_vs_pure_background": 0.593757227638729
+          },
+          "neg_pure_far": {
+            "n": 23966,
+            "frac_above_thr": 0.0044229324876908956,
+            "median_prob": 0.03070799445207008
+          },
+          "pos_full": {
+            "n": 679,
+            "frac_above_thr": 0.4698085419734904,
+            "median_prob": 0.6816015357892586,
+            "auroc_vs_pure_background": 0.9791415080357164
+          },
+          "pos_boundary": {
+            "n": 1728,
+            "frac_above_thr": 0.43171296296296297,
+            "median_prob": 0.6373407229353386,
+            "auroc_vs_pure_background": 0.9024462833279421
+          },
+          "pos_no_ictal_second": {
+            "n": 0
+          },
+          "neg_pure": {
+            "n": 25418,
+            "frac_above_thr": 0.005704618774097096,
+            "median_prob": 0.03165593993184647
+          },
+          "neg_subthreshold": {
+            "n": 242,
+            "frac_above_thr": 0.08677685950413223,
+            "median_prob": 0.23051181966200124,
+            "auroc_vs_pure_background": 0.8198151697014349
+          },
+          "clean_units_only": {
+            "n": 26097,
+            "auroc": 0.9791415080357164,
+            "auprc": 0.5883935157669732,
+            "note": "fully ictal positives vs pure background only (boundary and sub-threshold units removed); DESCRIPTIVE"
+          },
+          "without_subthreshold_negatives": {
+            "n": 27825,
+            "auroc": 0.9240815378258975,
+            "auprc": 0.7185366452710376
+          }
+        }
+      }
+    }
+  },
+  "b_head_vs_unit": {
+    "descriptive_on_eval": true,
+    "threshold_for_pooled_F1": "best dev F1 of the same pooling on the dev fused track (in-sample stacker refit); chosen on dev",
+    "per_second_reference": {
+      "fusion": {
+        "auroc": 0.9626452539745135,
+        "auprc": 0.7481087612553416
+      },
+      "catboost": {
+        "auroc": 0.9475445302141492,
+        "auprc": 0.6066353398033514
+      },
+      "linoss": {
+        "auroc": 0.9380184562520195,
+        "auprc": 0.6119768335116629
+      }
+    },
+    "12s": {
+      "fusion": {
+        "units_fully_scored_at_1s": 38156,
+        "units": 38384,
+        "positives_fully_scored": 2329,
+        "per_second_on_unit_seconds": {
+          "auroc": 0.9625990880884384,
+          "auprc": 0.7477571234003121,
+          "seconds": 457872,
+          "positives": 24126
+        },
+        "pooled_lme": {
+          "all_units": {
+            "auroc": 0.9510913892516932,
+            "auprc": 0.7396092292470227,
+            "f1": 0.6333785617367707,
+            "precision": 0.8676579925650557,
+            "recall": 0.4987179487179487,
+            "specificity": 0.9950615913883032,
+            "thr": 0.20506645779979482
+          },
+          "fully_scored_units": {
+            "auroc": 0.9522816955767459,
+            "auprc": 0.7402503186016496,
+            "f1": 0.6330425299890948,
+            "precision": 0.8670649738610904,
+            "recall": 0.49849720910261913,
+            "specificity": 0.9950316800178636,
+            "thr": 0.20506645779979482
+          }
+        },
+        "pooled_mean": {
+          "all_units": {
+            "auroc": 0.9510253552875071,
+            "auprc": 0.7387469441167979,
+            "f1": 0.6124721603563474,
+            "precision": 0.8785942492012779,
+            "recall": 0.4700854700854701,
+            "specificity": 0.9957829319720342,
+            "thr": 0.21693641994097934
+          },
+          "fully_scored_units": {
+            "auroc": 0.9522171590222528,
+            "auprc": 0.7393812133952259,
+            "f1": 0.612027972027972,
+            "precision": 0.8780096308186196,
+            "recall": 0.46972949763847144,
+            "specificity": 0.9957573896781757,
+            "thr": 0.21693641994097934
+          }
+        },
+        "trained_head": {
+          "key": "look_mean_cb",
+          "all_units": {
+            "auroc": 0.9520295944083536,
+            "auprc": 0.746551203967708,
+            "f1": 0.6512861309997349,
+            "precision": 0.8581411600279525,
+            "recall": 0.5247863247863248,
+            "specificity": 0.9943679946731773,
+            "thr": 0.23565363472010045
+          },
+          "fully_scored_units": {
+            "auroc": 0.9523939903800145,
+            "auprc": 0.7469811566798479,
+            "f1": 0.6510388918486947,
+            "precision": 0.8575438596491228,
+            "recall": 0.5246887075998282,
+            "specificity": 0.9943338822675636,
+            "thr": 0.23565363472010045
+          }
+        },
+        "decomposition_fully_scored_units": {
+          "unit_label_effect_auroc": -0.010317392511692502,
+          "head_effect_auroc": 0.00011229480326857555,
+          "unit_label_effect_auprc": -0.007506804798662503,
+          "head_effect_auprc": 0.006730838078198298,
+          "pooling": "log-mean-exp"
+        }
+      },
+      "catboost": {
+        "units_fully_scored_at_1s": 38156,
+        "units": 38384,
+        "positives_fully_scored": 2329,
+        "per_second_on_unit_seconds": {
+          "auroc": 0.9475233862086546,
+          "auprc": 0.6065698403589028,
+          "seconds": 457872,
+          "positives": 24126
+        },
+        "pooled_lme": {
+          "all_units": {
+            "auroc": 0.9396995256035595,
+            "auprc": 0.6365120051031639,
+            "f1": 0.591964465980214,
+            "precision": 0.5610409491006506,
+            "recall": 0.6264957264957265,
+            "specificity": 0.9681777827100211,
+            "thr": 0.6432106317030036
+          },
+          "fully_scored_units": {
+            "auroc": 0.9409259704838683,
+            "auprc": 0.6376476810650338,
+            "f1": 0.5919318872896817,
+            "precision": 0.5606758832565284,
+            "recall": 0.626878488621726,
+            "specificity": 0.9680687749462695,
+            "thr": 0.6432106317030036
+          }
+        },
+        "pooled_mean": {
+          "all_units": {
+            "auroc": 0.9396578268061734,
+            "auprc": 0.6365889732997514,
+            "f1": 0.5920840064620355,
+            "precision": 0.5612557427258805,
+            "recall": 0.6264957264957265,
+            "specificity": 0.9682055265786261,
+            "thr": 0.6427128126281209
+          },
+          "fully_scored_units": {
+            "auroc": 0.9408841205956066,
+            "auprc": 0.6377284042866995,
+            "f1": 0.592051905920519,
+            "precision": 0.5608912792931233,
+            "recall": 0.626878488621726,
+            "specificity": 0.9680966868562816,
+            "thr": 0.6427128126281209
+          }
+        },
+        "trained_head": {
+          "key": "catboost",
+          "all_units": {
+            "auroc": 0.9396995374599137,
+            "auprc": 0.6365120349264758,
+            "f1": 0.591964465980214,
+            "precision": 0.5610409491006506,
+            "recall": 0.6264957264957265,
+            "specificity": 0.9681777827100211,
+            "thr": 0.6432106317030036
+          },
+          "fully_scored_units": {
+            "auroc": 0.9409259824683722,
+            "auprc": 0.637647711130137,
+            "f1": 0.5919318872896817,
+            "precision": 0.5606758832565284,
+            "recall": 0.626878488621726,
+            "specificity": 0.9680687749462695,
+            "thr": 0.6432106317030036
+          }
+        },
+        "decomposition_fully_scored_units": {
+          "unit_label_effect_auroc": -0.006597415724786337,
+          "head_effect_auroc": 1.1984503944795222e-08,
+          "unit_label_effect_auprc": 0.031077840706130955,
+          "head_effect_auprc": 3.006510318481759e-08,
+          "pooling": "log-mean-exp"
+        }
+      },
+      "linoss": {
+        "units_fully_scored_at_1s": 38156,
+        "units": 38384,
+        "positives_fully_scored": 2329,
+        "per_second_on_unit_seconds": {
+          "auroc": 0.9379126136600207,
+          "auprc": 0.6113734603820893,
+          "seconds": 457872,
+          "positives": 24126
+        },
+        "pooled_lme": {
+          "all_units": {
+            "auroc": 0.9180731148159849,
+            "auprc": 0.5901210029397324,
+            "f1": 0.5341648590021691,
+            "precision": 0.7307121661721068,
+            "recall": 0.42094017094017094,
+            "specificity": 0.9899289756963711,
+            "thr": 0.5100548710641873
+          },
+          "fully_scored_units": {
+            "auroc": 0.9190048504044465,
+            "auprc": 0.5904449193337299,
+            "f1": 0.5343137254901961,
+            "precision": 0.7304542069992555,
+            "recall": 0.42121082009446115,
+            "specificity": 0.9898958885756552,
+            "thr": 0.5100548710641873
+          }
+        },
+        "pooled_mean": {
+          "all_units": {
+            "auroc": 0.9173326202921975,
+            "auprc": 0.5852771175824414,
+            "f1": 0.47360660572102625,
+            "precision": 0.764034253092293,
+            "recall": 0.34316239316239316,
+            "specificity": 0.9931195205859505,
+            "thr": 0.5625083010822087
+          },
+          "fully_scored_units": {
+            "auroc": 0.9182587191491749,
+            "auprc": 0.5855966477400394,
+            "f1": 0.47424511545293074,
+            "precision": 0.763584366062917,
+            "recall": 0.34392443108630316,
+            "specificity": 0.9930778463170234,
+            "thr": 0.5625083010822087
+          }
+        },
+        "trained_head": {
+          "key": "look_mean",
+          "all_units": {
+            "auroc": 0.9329914909317861,
+            "auprc": 0.6792177938885977,
+            "f1": 0.520814880425155,
+            "precision": 0.8424068767908309,
+            "recall": 0.3769230769230769,
+            "specificity": 0.9954222616801687,
+            "thr": 0.7292299768730012
+          },
+          "fully_scored_units": {
+            "auroc": 0.9333420804233808,
+            "auprc": 0.6796564385538483,
+            "f1": 0.5207591933570581,
+            "precision": 0.8418024928092043,
+            "recall": 0.3769858308286818,
+            "specificity": 0.9953945348480197,
+            "thr": 0.7292299768730012
+          }
+        },
+        "decomposition_fully_scored_units": {
+          "unit_label_effect_auroc": -0.018907763255574195,
+          "head_effect_auroc": 0.014337230018934388,
+          "unit_label_effect_auprc": -0.020928541048359395,
+          "head_effect_auprc": 0.08921151922011838,
+          "pooling": "log-mean-exp"
+        }
+      }
+    },
+    "60s": {
+      "fusion": {
+        "units_fully_scored_at_1s": 28067,
+        "units": 28067,
+        "positives_fully_scored": 2407,
+        "per_second_on_unit_seconds": {
+          "auroc": 0.9626452539745135,
+          "auprc": 0.7481087612553416,
+          "seconds": 459255,
+          "positives": 24190
+        },
+        "pooled_lme": {
+          "all_units": {
+            "auroc": 0.9365237659321132,
+            "auprc": 0.7591335110399046,
+            "f1": 0.6473558331118788,
+            "precision": 0.8982300884955752,
+            "recall": 0.5060240963855421,
+            "specificity": 0.9946219797349961,
+            "thr": 0.17426112899027307
+          },
+          "fully_scored_units": {
+            "auroc": 0.9365237659321132,
+            "auprc": 0.7591335110399046,
+            "f1": 0.6473558331118788,
+            "precision": 0.8982300884955752,
+            "recall": 0.5060240963855421,
+            "specificity": 0.9946219797349961,
+            "thr": 0.17426112899027307
+          }
+        },
+        "pooled_mean": {
+          "all_units": {
+            "auroc": 0.9359603598364216,
+            "auprc": 0.7530097839169181,
+            "f1": 0.6352689322986352,
+            "precision": 0.8924812030075188,
+            "recall": 0.49314499376817617,
+            "specificity": 0.994427123928293,
+            "thr": 0.16243019785965337
+          },
+          "fully_scored_units": {
+            "auroc": 0.9359603598364216,
+            "auprc": 0.7530097839169181,
+            "f1": 0.6352689322986352,
+            "precision": 0.8924812030075188,
+            "recall": 0.49314499376817617,
+            "specificity": 0.994427123928293,
+            "thr": 0.16243019785965337
+          }
+        },
+        "trained_head": {
+          "key": "look_mean_cb",
+          "all_units": {
+            "auroc": 0.9388101118425377,
+            "auprc": 0.7646541894029177,
+            "f1": 0.6749226006191951,
+            "precision": 0.8904016337644656,
+            "recall": 0.5434150394682177,
+            "specificity": 0.9937256430241621,
+            "thr": 0.27356867657840456
+          },
+          "fully_scored_units": {
+            "auroc": 0.9388101118425377,
+            "auprc": 0.7646541894029177,
+            "f1": 0.6749226006191951,
+            "precision": 0.8904016337644656,
+            "recall": 0.5434150394682177,
+            "specificity": 0.9937256430241621,
+            "thr": 0.27356867657840456
+          }
+        },
+        "decomposition_fully_scored_units": {
+          "unit_label_effect_auroc": -0.02612148804240033,
+          "head_effect_auroc": 0.0022863459104245365,
+          "unit_label_effect_auprc": 0.011024749784562915,
+          "head_effect_auprc": 0.005520678363013176,
+          "pooling": "log-mean-exp"
+        }
+      },
+      "catboost": {
+        "units_fully_scored_at_1s": 28067,
+        "units": 28067,
+        "positives_fully_scored": 2407,
+        "per_second_on_unit_seconds": {
+          "auroc": 0.9475445302141492,
+          "auprc": 0.6066353398033514,
+          "seconds": 459255,
+          "positives": 24190
+        },
+        "pooled_lme": {
+          "all_units": {
+            "auroc": 0.9260493313053867,
+            "auprc": 0.6942889412900891,
+            "f1": 0.6289612676056338,
+            "precision": 0.6686944314459523,
+            "recall": 0.5936850851682592,
+            "specificity": 0.9724084177708495,
+            "thr": 0.6335675252629609
+          },
+          "fully_scored_units": {
+            "auroc": 0.9260493313053867,
+            "auprc": 0.6942889412900891,
+            "f1": 0.6289612676056338,
+            "precision": 0.6686944314459523,
+            "recall": 0.5936850851682592,
+            "specificity": 0.9724084177708495,
+            "thr": 0.6335675252629609
+          }
+        },
+        "pooled_mean": {
+          "all_units": {
+            "auroc": 0.9247561428556165,
+            "auprc": 0.6867190807849708,
+            "f1": 0.6176142697881828,
+            "precision": 0.6665062560153994,
+            "recall": 0.5754050685500623,
+            "specificity": 0.9729929851909587,
+            "thr": 0.6313507122099399
+          },
+          "fully_scored_units": {
+            "auroc": 0.9247561428556165,
+            "auprc": 0.6867190807849708,
+            "f1": 0.6176142697881828,
+            "precision": 0.6665062560153994,
+            "recall": 0.5754050685500623,
+            "specificity": 0.9729929851909587,
+            "thr": 0.6313507122099399
+          }
+        },
+        "trained_head": {
+          "key": "catboost",
+          "all_units": {
+            "auroc": 0.9270576837950885,
+            "auprc": 0.7092756160627856,
+            "f1": 0.6352941176470588,
+            "precision": 0.7525597269624573,
+            "recall": 0.5496468633153303,
+            "specificity": 0.9830475448168355,
+            "thr": 0.6722513437271118
+          },
+          "fully_scored_units": {
+            "auroc": 0.9270576837950885,
+            "auprc": 0.7092756160627856,
+            "f1": 0.6352941176470588,
+            "precision": 0.7525597269624573,
+            "recall": 0.5496468633153303,
+            "specificity": 0.9830475448168355,
+            "thr": 0.6722513437271118
+          }
+        },
+        "decomposition_fully_scored_units": {
+          "unit_label_effect_auroc": -0.021495198908762503,
+          "head_effect_auroc": 0.0010083524897017693,
+          "unit_label_effect_auprc": 0.08765360148673773,
+          "head_effect_auprc": 0.01498667477269644,
+          "pooling": "log-mean-exp"
+        }
+      },
+      "linoss": {
+        "units_fully_scored_at_1s": 28067,
+        "units": 28067,
+        "positives_fully_scored": 2407,
+        "per_second_on_unit_seconds": {
+          "auroc": 0.9380184562520195,
+          "auprc": 0.6119768335116629,
+          "seconds": 459255,
+          "positives": 24190
+        },
+        "pooled_lme": {
+          "all_units": {
+            "auroc": 0.9015076674586108,
+            "auprc": 0.6060715425392881,
+            "f1": 0.5337620578778135,
+            "precision": 0.7516981132075472,
+            "recall": 0.41379310344827586,
+            "specificity": 0.98717848791894,
+            "thr": 0.46164376692792086
+          },
+          "fully_scored_units": {
+            "auroc": 0.9015076674586108,
+            "auprc": 0.6060715425392881,
+            "f1": 0.5337620578778135,
+            "precision": 0.7516981132075472,
+            "recall": 0.41379310344827586,
+            "specificity": 0.98717848791894,
+            "thr": 0.46164376692792086
+          }
+        },
+        "pooled_mean": {
+          "all_units": {
+            "auroc": 0.8950451252695357,
+            "auprc": 0.5590225816130193,
+            "f1": 0.5532846715328467,
+            "precision": 0.6676453317674692,
+            "recall": 0.47237224761113417,
+            "specificity": 0.977942322681216,
+            "thr": 0.3523396254864211
+          },
+          "fully_scored_units": {
+            "auroc": 0.8950451252695357,
+            "auprc": 0.5590225816130193,
+            "f1": 0.5532846715328467,
+            "precision": 0.6676453317674692,
+            "recall": 0.47237224761113417,
+            "specificity": 0.977942322681216,
+            "thr": 0.3523396254864211
+          }
+        },
+        "trained_head": {
+          "key": "look_mean",
+          "all_units": {
+            "auroc": 0.9225284236901916,
+            "auprc": 0.7070906069548376,
+            "f1": 0.5854865310610226,
+            "precision": 0.8651502843216897,
+            "recall": 0.4424594931449938,
+            "specificity": 0.9935307872174591,
+            "thr": 0.6976328794728645
+          },
+          "fully_scored_units": {
+            "auroc": 0.9225284236901916,
+            "auprc": 0.7070906069548376,
+            "f1": 0.5854865310610226,
+            "precision": 0.8651502843216897,
+            "recall": 0.4424594931449938,
+            "specificity": 0.9935307872174591,
+            "thr": 0.6976328794728645
+          }
+        },
+        "decomposition_fully_scored_units": {
+          "unit_label_effect_auroc": -0.036510788793408744,
+          "head_effect_auroc": 0.02102075623158084,
+          "unit_label_effect_auprc": -0.005905290972374799,
+          "head_effect_auprc": 0.10101906441554953,
+          "pooling": "log-mean-exp"
+        }
+      }
+    }
+  },
+  "d_other_causes": {
+    "descriptive": true,
+    "seizures_shorter_than_12s": 60,
+    "seizures_shorter_than_60s": 209,
+    "n_seizures": 360,
+    "share_shorter_than_12s": 0.16666666666666666,
+    "share_shorter_than_60s": 0.5805555555555556,
+    "1s": {
+      "positive_units_by_longest_seizure_s": {
+        "0-12": {
+          "n": 446,
+          "share": 0.01843737081438611
+        },
+        "12-60": {
+          "n": 4765,
+          "share": 0.19698222405952873
+        },
+        "60-180": {
+          "n": 11962,
+          "share": 0.49450186027284004
+        },
+        "180-inf": {
+          "n": 7017,
+          "share": 0.29007854485324513
+        }
+      },
+      "recall_at_frozen_thr_by_longest_seizure_s": {
+        "0-12": {
+          "fusion": 0.0,
+          "catboost": 0.053811659192825115,
+          "linoss": 0.0
+        },
+        "12-60": {
+          "fusion": 0.5504721930745016,
+          "catboost": 0.6369359916054564,
+          "linoss": 0.20713536201469046
+        },
+        "60-180": {
+          "fusion": 0.6485537535529176,
+          "catboost": 0.7352449423173383,
+          "linoss": 0.2878281223875606
+        },
+        "180-inf": {
+          "fusion": 0.48795781673079663,
+          "catboost": 0.5747470428958245,
+          "linoss": 0.13039760581445062
+        }
+      },
+      "positive_units_with_no_annotated_second": 0
+    },
+    "12s": {
+      "positive_units_by_longest_seizure_s": {
+        "0-12": {
+          "n": 94,
+          "share": 0.040170940170940174
+        },
+        "12-60": {
+          "n": 533,
+          "share": 0.22777777777777777
+        },
+        "60-180": {
+          "n": 1111,
+          "share": 0.47478632478632476
+        },
+        "180-inf": {
+          "n": 602,
+          "share": 0.25726495726495724
+        }
+      },
+      "recall_at_frozen_thr_by_longest_seizure_s": {
+        "0-12": {
+          "fusion": 0.0,
+          "catboost": 0.0425531914893617,
+          "linoss": 0.0
+        },
+        "12-60": {
+          "fusion": 0.48405253283302063,
+          "catboost": 0.5984990619136961,
+          "linoss": 0.3771106941838649
+        },
+        "60-180": {
+          "fusion": 0.6228622862286228,
+          "catboost": 0.7200720072007201,
+          "linoss": 0.47164716471647167
+        },
+        "180-inf": {
+          "fusion": 0.46179401993355484,
+          "catboost": 0.5697674418604651,
+          "linoss": 0.260797342192691
+        }
+      },
+      "positive_units_with_no_annotated_second": 0
+    },
+    "60s": {
+      "positive_units_by_longest_seizure_s": {
+        "0-12": {
+          "n": 111,
+          "share": 0.04611549646863315
+        },
+        "12-60": {
+          "n": 688,
+          "share": 0.2858329871208974
+        },
+        "60-180": {
+          "n": 1101,
+          "share": 0.45741587037806397
+        },
+        "180-inf": {
+          "n": 507,
+          "share": 0.21063564603240548
+        }
+      },
+      "recall_at_frozen_thr_by_longest_seizure_s": {
+        "0-12": {
+          "fusion": 0.0,
+          "catboost": 0.018018018018018018,
+          "linoss": 0.0
+        },
+        "12-60": {
+          "fusion": 0.4738372093023256,
+          "catboost": 0.5101744186046512,
+          "linoss": 0.4258720930232558
+        },
+        "60-180": {
+          "fusion": 0.6584922797456857,
+          "catboost": 0.6448683015440508,
+          "linoss": 0.5622161671207992
+        },
+        "180-inf": {
+          "fusion": 0.5069033530571992,
+          "catboost": 0.5128205128205128,
+          "linoss": 0.30177514792899407
+        }
+      },
+      "positive_units_with_no_annotated_second": 0
+    }
+  },
+  "summary": [
+    "(c) Units and prevalence: 1 s 459,255 seconds, 0.0527 positive; 12 s 38,384 clips, 0.0610; 60 s 28,067 windows, 0.0858.",
+    "(a) Boundary units: 0.029 of positive seconds are edge seconds, against 0.271 of positive 12 s clips and 0.718 of positive 60 s windows that are only partly ictal; 0.0094 of negative 60 s windows contain ictal seconds (sub-threshold overlap).",
+    "(a) Fusion at 12s, frozen threshold: recall 0.611 on fully ictal units vs 0.293 on boundary units; AUROC vs pure background 0.976 vs 0.886; clean units only (descriptive) AUROC 0.976.",
+    "(a) Fusion at 60s, frozen threshold: recall 0.642 on fully ictal units vs 0.505 on boundary units; AUROC vs pure background 0.987 vs 0.922; clean units only (descriptive) AUROC 0.987.",
+    "(a) Fusion at 1 s: recall 0.582 on interior seconds vs 0.199 on edge seconds.",
+    "(b) 12s, units fully scored at 1 s (38,156/38,384): per-second AUROC of the fused track on their seconds 0.9626; pooled (log-mean-exp) 0.9523; trained head 0.9524 -> unit/label effect -0.0103, head effect +0.0001 (AUROC); AUPRC -0.0075 / +0.0067. Pooled-track F1 at a dev threshold 0.633 vs trained head 0.651 (all units).",
+    "(b) 60s, units fully scored at 1 s (28,067/28,067): per-second AUROC of the fused track on their seconds 0.9626; pooled (log-mean-exp) 0.9365; trained head 0.9388 -> unit/label effect -0.0261, head effect +0.0023 (AUROC); AUPRC +0.0110 / +0.0055. Pooled-track F1 at a dev threshold 0.647 vs trained head 0.675 (all units).",
+    "(d) Peri-ictal background (pure-background units within 60 s of a seizure), fusion false-positive rate at the frozen threshold, near vs far: 1s 0.0578 (n = 30,196) vs 0.0028; 12s 0.0495 (n = 2,365) vs 0.0026; 60s 0.0386 (n = 1,452) vs 0.0033.",
+    "(d) 60 of 360 eval seizures are shorter than 12 s and 209 shorter than 60 s.",
+    "(d) 1s fusion recall by seizure duration: 0-12 s 0.000, 12-60 s 0.550, 60-180 s 0.649, 180-inf s 0.488; share of positive units: 0-12 0.018, 12-60 0.197, 60-180 0.495, 180-inf 0.290.",
+    "(d) 12s fusion recall by seizure duration: 0-12 s 0.000, 12-60 s 0.484, 60-180 s 0.623, 180-inf s 0.462; share of positive units: 0-12 0.040, 12-60 0.228, 60-180 0.475, 180-inf 0.257.",
+    "(d) 60s fusion recall by seizure duration: 0-12 s 0.000, 12-60 s 0.474, 60-180 s 0.658, 180-inf s 0.507; share of positive units: 0-12 0.046, 12-60 0.286, 60-180 0.457, 180-inf 0.211."
+  ]
+}
