@@ -1,0 +1,190 @@
+{
+ "provenance": {
+  "git_commit": "03bc40e3189629fc49af563b59b0fa3333b1d31c",
+  "date": "2026-10-15 21:05",
+  "command": "per-metric comparison of results/tusz/{fusion_1s,u12,u60}_eval_results.json (official) with the development-run eval_results.json files; all numeric leaves; thresholds |d|>1e-6",
+  "source": "official vs development run"
+ },
+ "files": {
+  "fusion_1s": {
+   "dev_file": "C:/Coding/research/phase2-hybrain-ext/runs/linoss_cb/fusion_osc2/eval_results.json",
+   "n_numeric_compared": 320,
+   "max_abs_diff": 0,
+   "metrics_over_1e-6": [],
+   "non_numeric_or_missing_mismatches": [],
+   "note": "dev file stores selections inside eval_results.json; compared separately against results/tusz/fusion_1s_selection.json: stacker candidate per seed equal (lr_ctx,lr,lr,lr,lr_ctx,lr_ctx), all 123 numeric/string selection leaves present in both equal (max |d| = 0)"
+  },
+  "u12": {
+   "dev_file": "C:/Coding/research/phase2-hybrain-ext/runs/linoss_cb/overlook/osc2ctx_u12/eval_results.json",
+   "n_numeric_compared": 231,
+   "max_abs_diff": 0.00043685325445208534,
+   "metrics_over_1e-6": [
+    {
+     "metric": "/results/look_mean/accuracy",
+     "official": 0.9577167569820758,
+     "dev": 0.9576907044601918,
+     "abs_diff": 2.605252188403462e-05
+    },
+    {
+     "metric": "/results/look_mean/auprc",
+     "official": 0.6792177938885977,
+     "dev": 0.6791978501235094,
+     "abs_diff": 1.9943765088292764e-05
+    },
+    {
+     "metric": "/results/look_mean/auroc",
+     "official": 0.9329914909317861,
+     "dev": 0.9329900444565853,
+     "abs_diff": 1.4464752008391812e-06
+    },
+    {
+     "metric": "/results/look_mean/f1",
+     "official": 0.520814880425155,
+     "dev": 0.5203780271707029,
+     "abs_diff": 0.00043685325445208534
+    },
+    {
+     "metric": "/results/look_mean/precision",
+     "official": 0.8424068767908309,
+     "dev": 0.8422562141491395,
+     "abs_diff": 0.00015066264169139032
+    },
+    {
+     "metric": "/results/look_mean/recall",
+     "official": 0.3769230769230769,
+     "dev": 0.3764957264957265,
+     "abs_diff": 0.00042735042735042583
+    },
+    {
+     "metric": "/results/look_mean/thr",
+     "official": 0.7292299768730012,
+     "dev": 0.7292654660973354,
+     "abs_diff": 3.548922433427304e-05
+    },
+    {
+     "metric": "/results/look_mean_cb/thr",
+     "official": 0.23565363472010045,
+     "dev": 0.2356645800864596,
+     "abs_diff": 1.0945366359149666e-05
+    },
+    {
+     "metric": "/results/look_r0/auprc",
+     "official": 0.4922177178865463,
+     "dev": 0.4921717053701499,
+     "abs_diff": 4.6012516396354286e-05
+    },
+    {
+     "metric": "/results/look_r0/auroc",
+     "official": 0.9069521807154978,
+     "dev": 0.9069455293008449,
+     "abs_diff": 6.651414652836252e-06
+    },
+    {
+     "metric": "/results/look_r0/thr",
+     "official": 0.8046688415467524,
+     "dev": 0.8046840868147566,
+     "abs_diff": 1.5245268004115964e-05
+    },
+    {
+     "metric": "/results/look_r0_cb/auprc",
+     "official": 0.6883472673291706,
+     "dev": 0.6883294572157056,
+     "abs_diff": 1.7810113465022148e-05
+    },
+    {
+     "metric": "/results/look_r0_cb/auroc",
+     "official": 0.9473081689331274,
+     "dev": 0.9473070425794876,
+     "abs_diff": 1.126353639802069e-06
+    },
+    {
+     "metric": "/results/look_r1/auroc",
+     "official": 0.9117814634440148,
+     "dev": 0.9117832063280682,
+     "abs_diff": 1.7428840534128298e-06
+    },
+    {
+     "metric": "/results/look_r1/thr",
+     "official": 0.7313654031194917,
+     "dev": 0.7313994517792338,
+     "abs_diff": 3.404865974210303e-05
+    },
+    {
+     "metric": "/results/look_r1_cb/auprc",
+     "official": 0.7176629903291926,
+     "dev": 0.7176596071356443,
+     "abs_diff": 3.383193548311958e-06
+    },
+    {
+     "metric": "/results/look_r1_cb/thr",
+     "official": 0.2131353550372081,
+     "dev": 0.21314972302323787,
+     "abs_diff": 1.4367986029772961e-05
+    },
+    {
+     "metric": "/results/look_r2/auprc",
+     "official": 0.576113633088449,
+     "dev": 0.5760242869750376,
+     "abs_diff": 8.934611341138154e-05
+    },
+    {
+     "metric": "/results/look_r2/auroc",
+     "official": 0.9168130748553288,
+     "dev": 0.9168065894296334,
+     "abs_diff": 6.485425695368363e-06
+    },
+    {
+     "metric": "/results/look_r2/thr",
+     "official": 0.6980840500279784,
+     "dev": 0.6980018109016448,
+     "abs_diff": 8.223912633353869e-05
+    },
+    {
+     "metric": "/results/look_r2_cb/auprc",
+     "official": 0.7113939579895806,
+     "dev": 0.7113599612763524,
+     "abs_diff": 3.399671322823483e-05
+    },
+    {
+     "metric": "/results/look_r2_cb/auroc",
+     "official": 0.9516086108431576,
+     "dev": 0.9516072355060814,
+     "abs_diff": 1.3753370762259465e-06
+    },
+    {
+     "metric": "/results/look_r2_cb/thr",
+     "official": 0.19467763149833278,
+     "dev": 0.19472600677946683,
+     "abs_diff": 4.8375281134049875e-05
+    }
+   ],
+   "non_numeric_or_missing_mismatches": [
+    "/runs[0] official='s0' dev='kaggle_step1/runs/osc2_s0'",
+    "/runs[1] official='s1' dev='kaggle_step1/runs/osc2_s1'",
+    "/runs[2] official='s2' dev='kaggle_step1/runs/osc2_s2'",
+    "/runs[3] official='s3' dev='kaggle_step1/runs/osc2_s3'",
+    "/runs[4] official='s4' dev='kaggle_step1/runs/osc2_s4'"
+   ],
+   "note": "run labels differ only in naming (s0 vs kaggle_step1/runs/osc2_s0)"
+  },
+  "u60": {
+   "dev_file": "C:/Coding/research/phase2-hybrain-ext/runs/linoss_cb/overlook/osc2ctx_u60/eval_results.json",
+   "n_numeric_compared": 356,
+   "max_abs_diff": 0,
+   "metrics_over_1e-6": [],
+   "non_numeric_or_missing_mismatches": [
+    "/runs[0] official='s0' dev='kaggle_step1/runs/osc2_s0'",
+    "/runs[1] official='s1' dev='kaggle_step1/runs/osc2_s1'",
+    "/runs[2] official='s2' dev='kaggle_step1/runs/osc2_s2'",
+    "/runs[3] official='s3' dev='kaggle_step1/runs/osc2_s3'",
+    "/runs[4] official='s4' dev='kaggle_step1/runs/osc2_s4'"
+   ],
+   "note": "run labels differ only in naming (s0 vs kaggle_step1/runs/osc2_s0)"
+  }
+ },
+ "section_4_8": {
+  "rule": "each official fused metric within max(2 x per-seed sd, 0.01) of the development run",
+  "max_abs_diff_any_metric": 0.00043685325445208534,
+  "verdict": "agreement holds (path.md 4.8): max |d| over all compared metrics is 4.4e-4 (u12 look_mean F1), below the 0.01 floor, so every fused metric is within max(2 sd, 0.01); fusion_1s and u60 are exact (0 on every numeric leaf); u12 differs in 23 metrics (look_mean, look_mean_cb, look_r0..r2 and _cb rows: F1/precision/recall/accuracy/AUPRC/AUROC/threshold) at 1e-6..4.4e-4."
+ }
+}
