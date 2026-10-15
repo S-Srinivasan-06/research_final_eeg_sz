@@ -1,0 +1,15 @@
+{
+  "id": "<OWNER>/szfusion-chbmit-<MODE>",
+  "title": "szfusion chbmit <MODE>",
+  "code_file": "run_kernel.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": ["<OWNER>/szfusion-code"],
+  "competition_sources": [],
+  "kernel_sources": ["<OWNER>/szfusion-chbmit-prep-a", "<OWNER>/szfusion-chbmit-prep-b", "<OWNER>/szfusion-chbmit-prep-c"],
+  "model_sources": []
+}

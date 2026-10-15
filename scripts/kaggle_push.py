@@ -74,10 +74,10 @@ def kernel(name):
     # token datasets: default = this account's szfusion-tokens-tusz-*; override with any bit-identical store
     txt = txt.replace("<TOKENS_TRAIN>", os.environ.get("TOKENS_TRAIN", f"{OWNER}/szfusion-tokens-tusz-train"))
     txt = txt.replace("<TOKENS_DEV_EVAL>", os.environ.get("TOKENS_DEV_EVAL", f"{OWNER}/szfusion-tokens-tusz-dev-eval"))
-    txt = txt.replace("<GROUP>", os.environ.get("GROUP", "a"))
+    txt = txt.replace("<GROUP>", os.environ.get("GROUP", "a")).replace("<MODE>", os.environ.get("MODE", "linoss"))
     m.write_text(txt)
     k = d / "run_kernel.py"
-    k.write_text(k.read_text(encoding="utf-8").replace("<PATIENTS>", os.environ.get("PATIENTS", "")), encoding="utf-8")
+    k.write_text(k.read_text(encoding="utf-8").replace("<PATIENTS>", os.environ.get("PATIENTS", "")).replace("<MODE>", os.environ.get("MODE", "linoss")), encoding="utf-8")
     subprocess.run(CLI + ["kernels", "push", "-p", str(d)], check=True)
 
 
