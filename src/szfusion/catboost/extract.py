@@ -122,12 +122,9 @@ def main(argv=None):
     ap.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     ap.add_argument("--max_recordings", type=int, default=None)
     ap.add_argument("--config", default=str(CONFIG))
-    ap.add_argument("--data_root", default=None)
     ap.add_argument("--no_merge", action="store_true")
     a = ap.parse_args(argv)
     cfg = load_config(a.config)
-    if a.data_root:
-        cfg["data"]["root"] = a.data_root
     recs = select_recordings(cfg, a.split, a.max_recordings, cfg.get("seed", 0))
     rec_dir = Path(a.out) / a.split / "recs"; rec_dir.mkdir(parents=True, exist_ok=True)
     t = time.time()

@@ -1,0 +1,15 @@
+{
+  "id": "<OWNER>/szfusion-linoss-tusz",
+  "title": "szfusion linoss tusz",
+  "code_file": "run_kernel.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": ["<OWNER>/szfusion-code", "<OWNER>/szfusion-tokens-tusz-train", "<OWNER>/szfusion-tokens-tusz-dev-eval"],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

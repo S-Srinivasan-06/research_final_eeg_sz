@@ -7,3 +7,7 @@
 2026-10-15 08:15 [CHECK] S0 tests: tests/test_linoss.py and tests/test_fusion.py pass (4/4). New OscSeq equals the development OscSeq on the final seed-0 checkpoint (max |Δ logit| = 0.0).
 2026-10-15 08:40 [CHECK] S1 tokens: eval tokens rebuilt from the EDFs with the new code are bit-identical to the development store (880/880 recordings, max |Δ| = 0.0, label seconds differing = 0, unreadable channels = 0).
 2026-10-15 08:50 [CHECK] S1 CatBoost: eval rescored by catboost/score.py from the development committee is identical to the development scores (28,067 windows; max |Δ| = 0.0 for score, p_base, p_full, p_sens).
+2026-10-15 [CHECK] S1 12 s: units/overlooker.py on the development artefacts reproduces the development test row exactly (fused 0.952 / 0.7466 / 0.6513, precision 0.8581, recall 0.5248).
+2026-10-15 [CHECK] S1 1 s: fusion/run_1s.py reproduces the development eval exactly (fused_mean 0.9626 / 0.7481 / 0.6757, event sensitivity 0.507 at 3.01 FA/24h, every per-seed row equal). Stacker lr_ctx coefficients [1.157, 1.023, -0.538, 0.863, -0.755], intercept -5.926; event point 1 k = 61, θ = 0.1802.
+2026-10-15 [RUN] T1 done: dev and train tokens rebuilt from the EDFs with the new code are bit-identical to the development store (dev 1666/1666, train 4969/4969, max |Δ| = 0.0, 0 label seconds differing). Together with S1, the whole token store (train/dev/eval) reproduces exactly.
+2026-10-15 [RUN] T2 started: CatBoost feature extraction (eval, dev, train; 13 workers). Token store upload to private Kaggle datasets started.
