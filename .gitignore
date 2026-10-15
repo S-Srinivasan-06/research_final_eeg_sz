@@ -1,0 +1,18 @@
+# data, model and run artefacts never enter git (RULES.md 4)
+work/
+*.npy
+*.npz
+*.pkl
+*.pt
+*.pth
+*.cbm
+*.parquet
+*.h5
+*.edf
+index.json
+*.log
+events.jsonl
+configs/paths.yaml
+__pycache__/
+.ipynb_checkpoints/
+.venv/
