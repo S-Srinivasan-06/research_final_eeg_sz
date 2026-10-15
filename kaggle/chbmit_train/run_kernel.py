@@ -5,7 +5,7 @@ markers/). Step 1 merges them with szfusion.chbmit_store (z-score fitted on the 
 feature tables). Then:
   linoss    5 seeds of the final recipe in clip-only mode (--clips, L = 12, CHB22 hemisphere swap), 2 × T4
   catboost  the base (20) + sens (10, Optuna) committee on the 588 clip features (configs/chbmit_hybrain.yaml), GPU
-Outputs: /kaggle/working/{store_meta,linoss|catboost}/ (per-second / per-clip dev and test outputs, logs, models).
+Outputs: /kaggle/working/{store_meta,linoss|catboost,catboost_scores}/ (per-second / per-clip dev and test outputs, logs, models).
 """
 import glob
 import json
@@ -69,7 +69,9 @@ elif MODE == "catboost":
     cfg = f"{repo}/configs/chbmit_hybrain.yaml"
     subprocess.run([sys.executable, "-u", "-m", "szfusion.catboost.train", "--config", cfg, "--feat_dir",
                     f"{store}/cbfeats", "--out_dir", out, "--gpu", "--time_budget_h", "10.5"], env=ENV, check=True)
+    # scores go to their own folder: catboost.train already writes a scores_dev.npz without rec_id/t0 into `out`,
+    # which catboost.score would treat as done and skip; eval/chbmit_scores.py keys the clips by rec_id and t0
     subprocess.run([sys.executable, "-u", "-m", "szfusion.catboost.score", "--config", cfg, "--feat_dir",
-                    f"{store}/cbfeats", "--models", out, "--out", out, "--splits", "dev", "test", "--threads", "4"],
-                   env=ENV, check=True)
+                    f"{store}/cbfeats", "--models", out, "--out", f"{W}/catboost_scores", "--splits", "dev", "test",
+                    "--threads", "4"], env=ENV, check=True)
 print("[k] ALL DONE", flush=True)
