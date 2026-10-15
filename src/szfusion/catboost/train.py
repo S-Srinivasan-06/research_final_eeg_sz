@@ -18,7 +18,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from szfusion.catboost.context import add_context
+from szfusion.catboost.context import maybe_context as add_context
 from szfusion.catboost.extract import load_config, load_split
 
 META_COLS = ["rec_id", "patient", "session", "montage_dir", "rec_duration", "t0", "y"]

@@ -21,22 +21,25 @@ from pathlib import Path
 
 import numpy as np
 
-from szfusion.catboost.context import add_context
+from szfusion.catboost.context import maybe_context as add_context
 from szfusion.catboost.extract import load_config
 from szfusion.util.monitor import Log
 
 
-def load_models(model_dir, log):
+def load_models(model_dir, log, cfg):
+    """The committees named in cfg["ensemble"]["members"]; each must hold repeats × n_folds models."""
     from catboost import CatBoostClassifier
-    com = {"base": [], "full": [], "sens": []}
+    members = cfg["ensemble"]["members"]
+    com = {k: [] for k in members}
     for p in sorted(Path(model_dir).glob("cb_*.cbm")):
         m = CatBoostClassifier(); m.load_model(str(p)); com[p.stem.split("_")[1]].append(m)
     log.event("models", **{k: len(v) for k, v in com.items()})
-    assert [len(com[k]) for k in ("base", "full", "sens")] == [20, 20, 10], "expected 20 base, 20 full, 10 sens models"
+    for k, c in members.items():
+        assert len(com[k]) == c["repeats"] * cfg["train"]["n_folds"], f"committee {k}: {len(com[k])} models"
     return com
 
 
-def score_split(feat_dir, split, com, base_cols, full_cols, ccfg, threads, log, chunk_recs=150):
+def score_split(feat_dir, split, com, base_cols, full_cols, ccfg, threads, log, members, chunk_recs=150):
     import pandas as pd
     t = time.time()
     df = pd.read_parquet(Path(feat_dir) / split / "features.parquet")
@@ -50,13 +53,13 @@ def score_split(feat_dir, split, com, base_cols, full_cols, ccfg, threads, log, 
         assert cols == full_cols, "context column names differ from the trained models' feature_cols_full.txt"
         Xb = sub[base_cols].to_numpy(np.float32); Xf = sub[full_cols].to_numpy(np.float32)
         for k, ms in com.items():
-            X = Xb if k == "base" else Xf
+            X = Xb if members[k]["features"] == "base" else Xf
             parts[k].append(np.mean([m.predict_proba(X, thread_count=threads)[:, 1] for m in ms], 0))
         metas.append(sub[["rec_id", "patient", "t0", "rec_duration", "y"]].copy())
         log(f"  [{split}] recordings {min(ci + chunk_recs, len(recs))}/{len(recs)}  {time.time() - t:.0f}s")
     meta = pd.concat(metas, ignore_index=True)
     p = {k: np.concatenate(v) for k, v in parts.items()}
-    return meta, np.mean(np.vstack([p["base"], p["full"], p["sens"]]), 0), p
+    return meta, np.mean(np.vstack([p[k] for k in members]), 0), p                # equal mean of committee means
 
 
 def main(argv=None):
@@ -66,10 +69,11 @@ def main(argv=None):
     ap.add_argument("--out", required=True)
     ap.add_argument("--splits", nargs="+", default=["dev", "eval"])
     ap.add_argument("--threads", type=int, default=6)
+    ap.add_argument("--config", default=None, help="default: configs/tusz_final.yaml")
     a = ap.parse_args(argv)
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     log = Log(out, name="score"); log.event("config", **vars(a))
-    cfg = load_config()
+    cfg = load_config(a.config)
     base_cols = (Path(a.models) / "feature_cols_base.txt").read_text().split("\n")
     full_cols = (Path(a.models) / "feature_cols_full.txt").read_text().split("\n")
     com = None
@@ -77,9 +81,9 @@ def main(argv=None):
         f = out / f"scores_{split}.npz"
         if f.exists():
             log(f"{f.name} exists, skipping (delete it to recompute)"); continue
-        com = com or load_models(a.models, log)
+        com = com or load_models(a.models, log, cfg)
         t = time.time()
-        meta, score, p = score_split(a.feat_dir, split, com, base_cols, full_cols, cfg["context"], a.threads, log)
+        meta, score, p = score_split(a.feat_dir, split, com, base_cols, full_cols, cfg["context"], a.threads, log, cfg["ensemble"]["members"])
         np.savez(f, score=score.astype(np.float32), **{f"p_{k}": v.astype(np.float32) for k, v in p.items()},
                  rec_id=meta["rec_id"].to_numpy().astype(str), patient=meta["patient"].to_numpy().astype(str),
                  t0=meta["t0"].to_numpy(), rec_duration=meta["rec_duration"].to_numpy(), y=meta["y"].to_numpy())

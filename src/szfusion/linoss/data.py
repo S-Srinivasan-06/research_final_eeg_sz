@@ -143,3 +143,62 @@ class RecordingWindows(Dataset):
         out = np.full(total_sec, np.nan); ok = wsum > 0
         out[ok] = acc[ok] / wsum[ok]
         return out
+
+
+class ClipSegments(Dataset):
+    """Clip-only training (CHB-MIT, HyBrain protocol): every sample is one listed train clip of L = 12 s, so the
+    model never sees a second outside the train clips. One epoch = n_seg clips drawn with replacement, fully
+    determined by (seed, epoch): half from the positive clips, half from the negative clips (a 1:1 balance, as in
+    the authors' loader). Labels are per second (store y_sec). Augmentation as TrainSegments: hemisphere swap with
+    p = 0.5 (perm), then gain s ~ U(0.8, 1.2) added as log(s) / gain_std."""
+
+    def __init__(self, store: Store, starts, labels, L=12, n_seg=6000, seed=0, augment=True, perm=None, gain_std=1.0):
+        self.s, self.L, self.n, self.seed, self.augment = store, L, n_seg, seed, augment
+        self.starts, self.lab = np.asarray(starts, np.int64), np.asarray(labels)
+        self.pos, self.neg = np.flatnonzero(self.lab == 1), np.flatnonzero(self.lab == 0)
+        self.shape = tuple(store.X.shape[1:])
+        self.perm, self.gain_std = perm, gain_std
+        self.n_pos_sec = int(sum(int(np.asarray(store.Y[s:s + L]).sum()) for s in self.starts[self.pos]))
+        self.set_epoch(1)
+
+    def set_epoch(self, epoch):
+        rng = np.random.default_rng((self.seed, epoch, 7))
+        n_pos = self.n // 2
+        pick = np.r_[self.pos[rng.integers(0, len(self.pos), n_pos)], self.neg[rng.integers(0, len(self.neg), self.n - n_pos)]]
+        self.spec = self.starts[pick[rng.permutation(self.n)]]
+        self.epoch = epoch
+
+    def __len__(self):
+        return self.n
+
+    def __getitem__(self, i):
+        a = int(self.spec[i])
+        x = np.asarray(self.s.X[a:a + self.L], np.float32).copy(); y = np.asarray(self.s.Y[a:a + self.L], np.float32)
+        if self.augment:
+            g = np.random.default_rng((self.seed, self.epoch, int(i)))
+            if self.perm is not None and g.random() < 0.5:
+                x = x[:, self.perm]
+            x += np.float32(math.log(g.uniform(0.8, 1.2)) / self.gain_std)
+        return torch.from_numpy(np.ascontiguousarray(x)), torch.from_numpy(y), torch.from_numpy(np.ones(self.L, np.float32))
+
+
+class ClipWindows(Dataset):
+    """The listed clips themselves as scoring windows (each clip is scored from itself only)."""
+
+    def __init__(self, store: Store, starts, L=12):
+        self.s, self.L, self.starts = store, L, np.asarray(starts, np.int64)
+
+    def __len__(self):
+        return len(self.starts)
+
+    def __getitem__(self, i):
+        a = int(self.starts[i])
+        return (torch.from_numpy(np.asarray(self.s.X[a:a + self.L], np.float32).copy()),
+                torch.from_numpy(np.ones(self.L, np.float32)), int(i))
+
+    def to_seconds(self, logits, total_sec):
+        """(n_clips, L) logits -> per-second probability aligned to the store rows (NaN outside the clips)."""
+        out = np.full(total_sec, np.nan)
+        rows = (self.starts[:, None] + np.arange(self.L)).ravel()
+        out[rows] = 1 / (1 + np.exp(-logits.astype(np.float64).ravel()))
+        return out

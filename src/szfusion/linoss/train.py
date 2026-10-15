@@ -36,7 +36,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, Sampler
 
-from szfusion.linoss.data import RecordingWindows, Store, TrainSegments
+from szfusion.linoss.data import ClipSegments, ClipWindows, RecordingWindows, Store, TrainSegments
 from szfusion.linoss.model import build, oscillator_report
 from szfusion.util.ckpt import Checkpointer
 from szfusion.util.monitor import Log, ModuleTimer, Profiler, resources
@@ -68,6 +68,11 @@ def parse(argv=None):
     ap.add_argument("--max_hours", type=float, default=None, help="stop cleanly (resumable) after this many hours")
     ap.add_argument("--cpu", action="store_true", help="stay on CPU even if a GPU is visible")
     ap.add_argument("--deterministic", action="store_true", help="request deterministic CUDA kernels (slower)")
+    ap.add_argument("--clips", default=None, help="clip-only mode (CHB-MIT, HyBrain protocol): folder with "
+                    "clips_{train,dev,test}.npz; the store split is 'all', L must be 12")
+    ap.add_argument("--swap", default="tusz19", choices=["tusz19", "chb22", "none"], help="hemisphere-swap pairs")
+    ap.add_argument("--gain_std", type=float, default=None, help="token z-score sigma for the gain augmentation "
+                    "(default: TOKEN_STD of TUSZ; CHB-MIT: sigma of stats.json)")
     ap.add_argument("--smoke", action="store_true")
     return ap.parse_args(argv)
 
@@ -156,12 +161,25 @@ def main(argv=None):
         log("results.json exists: run finished. Delete it to re-score."); log.close(); return
     torch.manual_seed(a.seed); np.random.seed(a.seed)
     mcfg = json.loads(a.model)
+    from szfusion.data.chbmit import swap_perm_chb22
+    from szfusion.data.montage import SWAP_PERM_19, TOKEN_STD
+    perm = {"tusz19": SWAP_PERM_19, "chb22": swap_perm_chb22(), "none": None}[a.swap]
+    gain_std = a.gain_std or TOKEN_STD
     with prof.stage("load_data"):
-        st_tr, st_dev, st_ev = (Store(s, a.tokens) for s in ("train", "dev", "eval"))
         n_seg = 64 if a.smoke else a.n_seg
-        tr = TrainSegments(st_tr, a.L, n_seg, a.seed)
-        sub = list(range(0, len(st_dev.index), 40)) if a.smoke else None
-        dev_win = RecordingWindows(st_dev, a.L, a.L, sub)                     # per-epoch selection: stride = L
+        if a.clips:                                                           # CHB-MIT: one store, listed clips
+            assert a.L == 12, "clip-only mode needs --L 12"
+            st_tr = st_dev = st_ev = Store("all", a.tokens)
+            C = {s: np.load(Path(a.clips) / f"clips_{s}.npz") for s in ("train", "dev", "test")}
+            tr = ClipSegments(st_tr, C["train"]["start"], C["train"]["y"], a.L, n_seg, a.seed, perm=perm, gain_std=gain_std)
+            dev_starts = C["dev"]["start"][::20] if a.smoke else C["dev"]["start"]
+            dev_win = ClipWindows(st_dev, dev_starts, a.L)
+        else:
+            st_tr, st_dev, st_ev = (Store(s, a.tokens) for s in ("train", "dev", "eval"))
+            tr = TrainSegments(st_tr, a.L, n_seg, a.seed, perm=perm)
+            tr.gain_std = gain_std
+            sub = list(range(0, len(st_dev.index), 40)) if a.smoke else None
+            dev_win = RecordingWindows(st_dev, a.L, a.L, sub)                 # per-epoch selection: stride = L
         y_dev = np.asarray(st_dev.Y, np.int8)
     log.event("data", train_recordings=len(st_tr.index), train_seizure_seconds=tr.n_pos_sec, segments_per_epoch=n_seg,
               segment_s=a.L, dev_recordings=len(st_dev.index), dev_windows_per_epoch=len(dev_win),
@@ -247,7 +265,8 @@ def main(argv=None):
         prof.reset()
         sel_model = ema.model if ema else model
         lg = predict(sel_model, dev_win, a.eval_bs, a.num_workers, prof, log, "dev")
-        md = sec_metrics(dev_win.blend(lg, len(y_dev)), y_dev)
+        p_dev = dev_win.to_seconds(lg, len(y_dev)) if a.clips else dev_win.blend(lg, len(y_dev))
+        md = sec_metrics(p_dev, y_dev)
         if md["auprc"] > best["metric"]:
             best.update(metric=md["auprc"], epoch=epoch, patience=0)
             ck.save_best(sel_model, epoch, md["auprc"])
@@ -267,14 +286,18 @@ def main(argv=None):
     log(f"training finished: best epoch {best['epoch']} dev per-second AUPRC {best['metric']:.4f}")
     model.load_state_dict(torch.load(ck.best, map_location=device, weights_only=True)["model"])
     res = {"seed": a.seed, "params": n_params, "best": best, "cfg": {"n_el": tr.shape[0], **mcfg}, "L": a.L,
-           "final_stride": a.final_stride}
+           "final_stride": a.L if a.clips else a.final_stride, "align": bool(a.clips), "clips": bool(a.clips)}
     prof.reset()
-    for split, st in (("dev", st_dev), ("eval", st_ev)):
+    for split, st in ((("dev", st_dev), ("test", st_ev)) if a.clips else (("dev", st_dev), ("eval", st_ev))):
         f = out / f"prob_{split}.npy"
         if not f.exists():
-            subset = sub if split == "dev" else (list(range(0, len(st.index), 40)) if a.smoke else None)
-            ds = RecordingWindows(st, a.L, a.final_stride, subset)
-            p = ds.blend(predict(model, ds, a.eval_bs, a.num_workers, prof, log, f"final_{split}"), len(st.Y))
+            if a.clips:
+                ds = ClipWindows(st, dev_starts if split == "dev" else C["test"]["start"], a.L)
+                p = ds.to_seconds(predict(model, ds, a.eval_bs, a.num_workers, prof, log, f"final_{split}"), len(st.Y))
+            else:
+                subset = sub if split == "dev" else (list(range(0, len(st.index), 40)) if a.smoke else None)
+                ds = RecordingWindows(st, a.L, a.final_stride, subset)
+                p = ds.blend(predict(model, ds, a.eval_bs, a.num_workers, prof, log, f"final_{split}"), len(st.Y))
             np.save(f, p.astype(np.float32))
         if split == "dev":                      # eval labels are NOT read here (eval is scored once, by fusion)
             res[split] = sec_metrics(np.load(f).astype(np.float64), np.asarray(st.Y, np.int8))

@@ -29,7 +29,7 @@ for _z in glob.glob("/kaggle/input/**/*.zip", recursive=True):       # dataset f
     import zipfile
     zipfile.ZipFile(_z).extractall("/kaggle/tmp/unzip/" + os.path.basename(os.path.dirname(_z)))
 feat_dir = os.path.dirname(os.path.dirname(find_one("/kaggle/**/train/features.parquet")))
-src = os.path.dirname(os.path.dirname(find_one("/kaggle/**/szfusion/catboost/train.py")))
+src = os.path.dirname(os.path.dirname(os.path.dirname(find_one("/kaggle/**/szfusion/catboost/train.py"))))  # .../src
 cfg = find_one("/kaggle/**/configs/tusz_final.yaml")
 prev = sorted({os.path.dirname(p) for p in glob.glob("/kaggle/input/**/cb_*.cbm", recursive=True)})
 print(f"[k] features={feat_dir}\n[k] src={src}\n[k] resume_from={prev[0] if prev else None}", flush=True)

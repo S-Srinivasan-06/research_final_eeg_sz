@@ -63,3 +63,11 @@ def add_context(df: pd.DataFrame, feat_cols, ccfg) -> tuple:
         out[a:b] = _file_context(A_all[a:b], t_all[a:b], k)
     extra = pd.DataFrame(out, columns=names, index=df.index)
     return pd.concat([df, extra], axis=1), src + names
+
+
+def maybe_context(df, feat_cols, ccfg):
+    """add_context, or nothing when ccfg is None or ccfg["mode"] == "none" (CHB-MIT clip-only protocol: the neighbouring
+    clips belong to other splits, so no statistic may be computed across clips)."""
+    if not ccfg or ccfg.get("mode") == "none":
+        return df.sort_values(["rec_id", "t0"], kind="stable").reset_index(drop=True), list(feat_cols)
+    return add_context(df, feat_cols, ccfg)

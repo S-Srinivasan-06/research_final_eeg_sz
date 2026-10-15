@@ -44,7 +44,7 @@ for sp in ("train", "dev", "eval"):
     for name in ("tokens.npy", "y_sec.npy", "index.json"):
         if not os.path.exists(f"{store}/{sp}/{name}"):
             sys.exit(f"[k] token store incomplete: {sp}/{name}")
-src = os.path.dirname(os.path.dirname(find("/kaggle/**/szfusion/linoss/train.py")))
+src = os.path.dirname(os.path.dirname(os.path.dirname(find("/kaggle/**/szfusion/linoss/train.py"))))  # .../src
 state = find("/kaggle/input/**/STATE.txt", required=False)
 state = os.path.dirname(state) if state else None
 subprocess.run("nvidia-smi --query-gpu=name,memory.total --format=csv", shell=True)
