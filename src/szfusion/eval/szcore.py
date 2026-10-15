@@ -143,7 +143,10 @@ def main():
     ap.add_argument("--feat_dir", required=True)
     ap.add_argument("--markers", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--force", action="store_true", help="only to regenerate the same file (never to re-select)")
     a = ap.parse_args()
+    if Path(a.out).exists() and not a.force:
+        raise SystemExit(f"{a.out} exists: the frozen outputs were already scored once (RULES.md 3)")
     res = {**score_1s(a.fusion_1s), **score_12s(a.unit12, a.tokens, a.markers),
            **score_60s(a.unit60, a.tokens, a.catboost, a.feat_dir)}
     for k, r in res.items():

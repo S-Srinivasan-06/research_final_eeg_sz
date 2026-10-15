@@ -62,10 +62,5 @@ catboost:
       min_event_overlap_sec: 10.0
     spec_min: 0.93             # dev constraints                                             [M]
     fa_h_max: 0.69
-    grid:                      # grid values [DEFAULT]
-      threshold: [0.30, 0.35, 0.40, 0.44, 0.50, 0.55, 0.60, 0.65, 0.70]
-      smooth_sec: [15.0, 30.0, 45.0]
-      dilate_sec: [0.0, 20.0, 30.0]
-      merge_gap_sec: [20.0, 40.0, 60.0]
-      min_event_overlap_sec: [10.0]
-      min_pred_event_sec: [10.0]
+    # The 60 s dev tuning grid is defined in src/szfusion/units/windows60.py:tune (15 dev quantiles 0.80-0.995 x
+    # smoothing {15,30,45} x dilation {0,20,30} x merge gap {20,40,60}); it is deliberately not configured here.

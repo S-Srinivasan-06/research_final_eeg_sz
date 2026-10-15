@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="900" viewBox="0 0 1000 900">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs>
+<rect x="0" y="0" width="1000" height="900" fill="#ffffff"/>
+<text x="500.0" y="24.0" font-family="Helvetica, Arial, sans-serif" font-size="15" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">CatBoost × LinOSS fusion: two parallel branches, the stacker and the 1 s / 12 s / 60 s heads</text>
+<rect x="380.0" y="40.0" width="240.0" height="40.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="500.0" y="56.7" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">one EEG recording</text>
+<text x="500.0" y="71.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">TUSZ: 19 electrodes; CHB-MIT: 22 bipolar</text>
+<rect x="20.0" y="100.0" width="460.0" height="520.0" rx="4" fill="#d6e9f8" stroke="#000000" stroke-width="1.4"/>
+<rect x="520.0" y="100.0" width="460.0" height="520.0" rx="4" fill="#f9d9e3" stroke="#000000" stroke-width="1.4"/>
+<text x="250.0" y="122.0" font-family="Helvetica, Arial, sans-serif" font-size="13" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">LinOSS branch: OscSeq (linoss/model.py)</text>
+<text x="750.0" y="122.0" font-family="Helvetica, Arial, sans-serif" font-size="13" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">CatBoost branch (catboost/*.py)</text>
+<rect x="40.0" y="138.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="250.0" y="160.6" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">tokens (tokens.py): log|FFT| of each 1 s, bins 0-99 Hz, z-scored</text>
+<text x="250.0" y="175.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">x: (B, L, N, 100)</text>
+<rect x="40.0" y="206.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="250.0" y="228.6" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">Linear 100 → 32  +  electrode embedding (N × 32)</text>
+<text x="250.0" y="243.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">(B, L, N, 32)</text>
+<line x1="250.0" y1="190.0" x2="250.0" y2="205.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="40.0" y="274.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="250.0" y="296.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">BiLinOSS block × 1, per electrode, weights shared; P = 32</text>
+<text x="250.0" y="311.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">(B·N, L, 32)</text>
+<line x1="250.0" y1="258.0" x2="250.0" y2="273.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="40.0" y="342.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="250.0" y="364.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">[mean ; max] over electrodes  →  Linear 64 → 96</text>
+<text x="250.0" y="379.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">(B, L, 96)</text>
+<line x1="250.0" y1="326.0" x2="250.0" y2="341.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="40.0" y="410.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="250.0" y="432.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">BiLinOSS block × 2 over the whole head; P = 96</text>
+<text x="250.0" y="447.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">(B, L, 96) = per-second summary h_t</text>
+<line x1="250.0" y1="394.0" x2="250.0" y2="409.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="40.0" y="478.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="250.0" y="500.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">head: Linear 96 → 1</text>
+<text x="250.0" y="515.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">per-second logit ℓ_t: (B, L)</text>
+<line x1="250.0" y1="462.0" x2="250.0" y2="477.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="40.0" y="546.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="250.0" y="568.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">blend 240 s windows every 120 s, w(τ) = 0.05 + sin²(π(τ+0.5)/L)</text>
+<text x="250.0" y="583.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">p_L(t), z_L(t) = logit p_L(t)</text>
+<line x1="250.0" y1="530.0" x2="250.0" y2="545.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="540.0" y="138.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="750.0" y="160.6" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">16 longitudinal bipolar chains, 200 Hz</text>
+<text x="750.0" y="175.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">60 Hz notch; 0.5 Hz high-pass (1); 35 Hz low-pass (4)</text>
+<rect x="540.0" y="206.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="750.0" y="228.6" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">60 s windows, stride 15 s</text>
+<text x="750.0" y="243.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">(n_windows, 16, 12000)</text>
+<line x1="750.0" y1="190.0" x2="750.0" y2="205.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="540.0" y="274.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="750.0" y="296.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">47 features / channel × 4 regions × {median, p95, p95 − median}</text>
+<text x="750.0" y="311.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">+ 24 PLV = 588 columns</text>
+<line x1="750.0" y1="258.0" x2="750.0" y2="273.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="540.0" y="342.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="750.0" y="364.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">±7-window context, 11 statistics per feature</text>
+<text x="750.0" y="379.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">588 + 11 × 588 = 7,056 columns</text>
+<line x1="750.0" y1="326.0" x2="750.0" y2="341.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="540.0" y="410.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="750.0" y="432.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">committees: base 20 (588) | full 20 (7,056) | sens 10 (7,056, Optuna)</text>
+<text x="750.0" y="447.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">CatBoost, oblivious trees</text>
+<line x1="750.0" y1="394.0" x2="750.0" y2="409.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="540.0" y="478.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="750.0" y="500.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">equal mean of the three committee means</text>
+<text x="750.0" y="515.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">p_C(window)</text>
+<line x1="750.0" y1="462.0" x2="750.0" y2="477.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="540.0" y="546.0" width="420.0" height="52.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="750.0" y="568.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">per second: mean of the 1-4 windows covering it</text>
+<text x="750.0" y="583.5" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">p_C(t), z_C(t) = logit p_C(t)</text>
+<line x1="750.0" y1="530.0" x2="750.0" y2="545.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<text x="250.0" y="612.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="italic" fill="#000000">206,529 parameters for N = 19; 206,625 for N = 22</text>
+<line x1="500.0" y1="80.0" x2="250.0" y2="98.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="500.0" y1="80.0" x2="750.0" y2="98.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="200.0" y="650.0" width="600.0" height="64.0" rx="4" fill="#ececec" stroke="#000000" stroke-width="1.0"/>
+<text x="500.0" y="671.1" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">1 s stacker (fusion/stacker.py), on logits z = logit p</text>
+<text x="500.0" y="686.0" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">late: w·Platt(z_C) + (1 − w)·Platt(z_L)  |  lr: [z_C, z_L, z_C·z_L]  |  lr_ctx: lr + S15(z_L), S61(z_L)</text>
+<text x="500.0" y="701.0" font-family="Helvetica, Arial, sans-serif" font-size="11.5" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">chosen by 5-fold patient-grouped CV on dev (out-of-fold AUPRC)</text>
+<line x1="250.0" y1="620.0" x2="400.0" y2="648.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="750.0" y1="620.0" x2="600.0" y2="648.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="40.0" y="770.0" width="280.0" height="90.0" rx="4" fill="#ececec" stroke="#000000" stroke-width="1.0"/>
+<text x="180.0" y="797.4" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">1 s head (fusion/protocol_1s.py)</text>
+<text x="180.0" y="811.7" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">p(t) → moving average k s → threshold</text>
+<text x="180.0" y="826.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">→ merge gaps → min duration</text>
+<text x="180.0" y="840.3" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">dev rule: max event sens., FA/24 h ≤ 16.56</text>
+<rect x="360.0" y="770.0" width="280.0" height="90.0" rx="4" fill="#ececec" stroke="#000000" stroke-width="1.0"/>
+<text x="500.0" y="797.4" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">12 s head (units/overlooker.py)</text>
+<text x="500.0" y="811.7" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">overlooker on h_t of the clip:</text>
+<text x="500.0" y="826.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">LME base + learned correction</text>
+<text x="500.0" y="840.3" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">WindowStacker [z_C, z_L, z_C·z_L]; best dev F1</text>
+<rect x="680.0" y="770.0" width="280.0" height="90.0" rx="4" fill="#ececec" stroke="#000000" stroke-width="1.0"/>
+<text x="820.0" y="797.4" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">60 s head (units/overlooker.py)</text>
+<text x="820.0" y="811.7" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">overlooker on h_t of the window,</text>
+<text x="820.0" y="826.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">WindowStacker on dev;</text>
+<text x="820.0" y="840.3" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">Zabihi post-processing (windows60.py)</text>
+<line x1="500.0" y1="714.0" x2="180.0" y2="768.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<path d="M40,436 L10,436 L10,742 L500,742 L500,768" fill="none" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+<path d="M500,742 L820,742 L820,768" fill="none" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+<path d="M960,504 L992,504 L992,752 L560,752 L560,768" fill="none" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+<path d="M900,752 L880,752 L880,768" fill="none" stroke="#000000" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+<text x="14.0" y="736.0" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" font-style="italic" fill="#000000">h_t of every second (units/embed.py)</text>
+<text x="566.0" y="765.0" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="start" font-weight="normal" font-style="italic" fill="#000000">CatBoost window / clip logit z_C</text>
+<text x="500.0" y="890.0" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="middle" font-weight="normal" font-style="italic" fill="#000000">solid: the 1 s path; dashed: inputs of the 12 s and 60 s heads (one LinOSS backbone serves every unit)</text>
+</svg>

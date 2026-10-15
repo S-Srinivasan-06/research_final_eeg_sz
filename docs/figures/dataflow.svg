@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs>
+<rect x="0" y="0" width="1000" height="600" fill="#ffffff"/>
+<text x="500.0" y="24.0" font-family="Helvetica, Arial, sans-serif" font-size="15" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">Data flow: stages of path.md section 3 and the modules that run them</text>
+<rect x="10.0" y="38.0" width="980.0" height="300.0" rx="4" fill="none" stroke="#000000" stroke-width="0.8" stroke-dasharray="5,4"/>
+<text x="20.0" y="56.0" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="bold" font-style="normal" fill="#000000">TUSZ v2.0.6 (train / dev / eval)</text>
+<rect x="20.0" y="80.0" width="150.0" height="180.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="95.0" y="152.4" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">TUSZ EDF</text>
+<text x="95.0" y="166.7" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">.csv_bi (term)</text>
+<text x="95.0" y="181.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">.csv (per channel)</text>
+<text x="95.0" y="195.3" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">data/tusz.py</text>
+<rect x="200.0" y="70.0" width="170.0" height="70.0" rx="4" fill="#d6e9f8" stroke="#000000" stroke-width="1.0"/>
+<text x="285.0" y="94.5" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">T1  tokens.py</text>
+<text x="285.0" y="108.8" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">(n_sec, 19, 100) per split</text>
+<text x="285.0" y="123.2" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">+ y_sec labels</text>
+<rect x="200.0" y="200.0" width="170.0" height="70.0" rx="4" fill="#f9d9e3" stroke="#000000" stroke-width="1.0"/>
+<text x="285.0" y="224.5" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">T2  catboost/extract.py</text>
+<text x="285.0" y="238.8" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">60 s windows every 15 s</text>
+<text x="285.0" y="253.1" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">588 features</text>
+<rect x="400.0" y="70.0" width="180.0" height="70.0" rx="4" fill="#d6e9f8" stroke="#000000" stroke-width="1.0"/>
+<text x="490.0" y="94.5" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">T4  linoss/train.py</text>
+<text x="490.0" y="108.8" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">OscSeq, seeds 0-4</text>
+<text x="490.0" y="123.2" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">prob_{dev,eval} per second</text>
+<rect x="400.0" y="200.0" width="180.0" height="70.0" rx="4" fill="#f9d9e3" stroke="#000000" stroke-width="1.0"/>
+<text x="490.0" y="224.5" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">T3  catboost/train.py, score.py</text>
+<text x="490.0" y="238.8" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">±7 context (7,056 cols)</text>
+<text x="490.0" y="253.1" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">50 models, scores per window</text>
+<rect x="610.0" y="60.0" width="170.0" height="60.0" rx="4" fill="#ececec" stroke="#000000" stroke-width="1.0"/>
+<text x="695.0" y="86.7" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">T5  fusion/run_1s.py</text>
+<text x="695.0" y="101.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">stacker + events, dev CV</text>
+<rect x="610.0" y="150.0" width="170.0" height="70.0" rx="4" fill="#ececec" stroke="#000000" stroke-width="1.0"/>
+<text x="695.0" y="174.5" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">T6  units/embed.py,</text>
+<text x="695.0" y="188.8" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">units/overlooker.py</text>
+<text x="695.0" y="203.1" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">12 s and 60 s heads</text>
+<rect x="610.0" y="250.0" width="170.0" height="60.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="695.0" y="276.7" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">T7  eval/szcore.py</text>
+<text x="695.0" y="291.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">timescoring 0.0.7</text>
+<rect x="810.0" y="60.0" width="170.0" height="60.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="895.0" y="86.7" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">1 s test</text>
+<text x="895.0" y="101.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">every second</text>
+<rect x="810.0" y="150.0" width="170.0" height="70.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="895.0" y="181.7" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">12 s test (HyBrain clips)</text>
+<text x="895.0" y="196.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">60 s test (Zabihi windows)</text>
+<rect x="810.0" y="250.0" width="170.0" height="60.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="895.0" y="276.7" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">SzCORE events</text>
+<text x="895.0" y="291.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">results/tusz/szcore.json</text>
+<line x1="170.0" y1="105.0" x2="198.0" y2="105.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="170.0" y1="235.0" x2="198.0" y2="235.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="370.0" y1="105.0" x2="398.0" y2="105.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="370.0" y1="235.0" x2="398.0" y2="235.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="580.0" y1="95.0" x2="608.0" y2="90.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="580.0" y1="110.0" x2="608.0" y2="175.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="580.0" y1="225.0" x2="608.0" y2="105.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="580.0" y1="240.0" x2="608.0" y2="195.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="780.0" y1="90.0" x2="808.0" y2="90.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="780.0" y1="185.0" x2="808.0" y2="185.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<path d="M610,110 L597,110 L597,280 L608,280" fill="none" stroke="#000000" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+<line x1="720.0" y1="220.0" x2="720.0" y2="248.0" stroke="#000000" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+<line x1="780.0" y1="280.0" x2="808.0" y2="280.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="10.0" y="352.0" width="980.0" height="200.0" rx="4" fill="none" stroke="#000000" stroke-width="0.8" stroke-dasharray="5,4"/>
+<text x="20.0" y="370.0" font-family="Helvetica, Arial, sans-serif" font-size="12" text-anchor="start" font-weight="bold" font-style="normal" fill="#000000">CHB-MIT v1.0.0, chb01-chb22, HyBrain within-patient 12 s clip split</text>
+<rect x="20.0" y="385.0" width="150.0" height="70.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="95.0" y="409.6" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">PhysioNet EDF</text>
+<text x="95.0" y="423.9" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">chbNN-summary.txt</text>
+<text x="95.0" y="438.2" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">data/chbmit.py</text>
+<rect x="20.0" y="470.0" width="150.0" height="70.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="95.0" y="494.6" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">HyBrain split lists</text>
+<text x="95.0" y="508.9" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">@ 694bdd4d</text>
+<text x="95.0" y="523.1" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">{train,dev,test}Set</text>
+<rect x="200.0" y="385.0" width="170.0" height="70.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="285.0" y="409.6" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">C1  tokens_chbmit.py</text>
+<text x="285.0" y="423.9" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">tokens (n_sec, 22, 100)</text>
+<text x="285.0" y="438.2" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">12 s clip features (588)</text>
+<rect x="400.0" y="420.0" width="180.0" height="80.0" rx="4" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="490.0" y="449.6" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">C1  chbmit_store.py</text>
+<text x="490.0" y="463.9" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">z-score on train clips</text>
+<text x="490.0" y="478.2" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">clip tables, label checks</text>
+<rect x="610.0" y="385.0" width="170.0" height="60.0" rx="4" fill="#d6e9f8" stroke="#000000" stroke-width="1.0"/>
+<text x="695.0" y="411.7" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">C2  linoss/train.py --clips</text>
+<text x="695.0" y="426.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">L = 12, seeds 0-4</text>
+<rect x="610.0" y="470.0" width="170.0" height="70.0" rx="4" fill="#f9d9e3" stroke="#000000" stroke-width="1.0"/>
+<text x="695.0" y="494.6" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">C2  catboost/train.py</text>
+<text x="695.0" y="508.9" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">chbmit_hybrain.yaml</text>
+<text x="695.0" y="523.1" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">base 20 + sens 10</text>
+<rect x="810.0" y="420.0" width="170.0" height="80.0" rx="4" fill="#ececec" stroke="#000000" stroke-width="1.0"/>
+<text x="895.0" y="449.6" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="bold" font-style="normal" fill="#000000">C3  eval/chbmit_scores.py</text>
+<text x="895.0" y="463.9" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">12 s clip + 1 s point-wise</text>
+<text x="895.0" y="478.2" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="middle" font-weight="normal" font-style="normal" fill="#000000">results/chbmit/*.json</text>
+<line x1="170.0" y1="420.0" x2="198.0" y2="420.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="170.0" y1="505.0" x2="398.0" y2="475.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="370.0" y1="430.0" x2="398.0" y2="450.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="580.0" y1="450.0" x2="608.0" y2="415.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="580.0" y1="470.0" x2="608.0" y2="500.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="780.0" y1="415.0" x2="808.0" y2="445.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<line x1="780.0" y1="505.0" x2="808.0" y2="475.0" stroke="#000000" stroke-width="1.2" marker-end="url(#arrow)"/>
+<rect x="20.0" y="568.0" width="22.0" height="14.0" rx="2" fill="#d6e9f8" stroke="#000000" stroke-width="1.0"/>
+<text x="50.0" y="580.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" font-style="normal" fill="#000000">LinOSS branch (OscSeq)</text>
+<rect x="260.0" y="568.0" width="22.0" height="14.0" rx="2" fill="#f9d9e3" stroke="#000000" stroke-width="1.0"/>
+<text x="290.0" y="580.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" font-style="normal" fill="#000000">CatBoost branch</text>
+<rect x="500.0" y="568.0" width="22.0" height="14.0" rx="2" fill="#ececec" stroke="#000000" stroke-width="1.0"/>
+<text x="530.0" y="580.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" font-style="normal" fill="#000000">fusion / heads</text>
+<rect x="740.0" y="568.0" width="22.0" height="14.0" rx="2" fill="#ffffff" stroke="#000000" stroke-width="1.0"/>
+<text x="770.0" y="580.0" font-family="Helvetica, Arial, sans-serif" font-size="11" text-anchor="start" font-weight="normal" font-style="normal" fill="#000000">data, preprocessing, scoring</text>
+<text x="980.0" y="596.0" font-family="Helvetica, Arial, sans-serif" font-size="10" text-anchor="end" font-weight="normal" font-style="italic" fill="#000000">dashed arrows: frozen outputs read by the SzCORE scorer</text>
+</svg>
