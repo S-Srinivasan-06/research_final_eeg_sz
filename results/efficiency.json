@@ -1,0 +1,12 @@
+{
+ "source": "Kaggle run logs (run.log 'time by stage' tables, events.jsonl gpu_peak_gb) of szfusion-linoss-tusz and szfusion-chbmit-linoss (Tesla T4), szfusion-chbmit-catboost (score.log, train_summary.json); local CHB-MIT builder timing (PROGRESS C1 check)",
+ "linoss_train_s_per_epoch": {"tusz": {"median": 28.1, "iqr": [27.5, 28.5], "epoch": "6,000 segments x 240 s, batch 32", "n_epochs": 86},
+                              "chbmit": {"median": 10.7, "iqr": [10.1, 11.4], "epoch": "6,000 clips x 12 s, batch 32", "n_epochs": 118}},
+ "linoss_gpu_peak_MB": {"tusz": 777, "chbmit": 201},
+ "linoss_inference_ms_per_12s": {"chbmit": {"value": 0.089, "how": "final_test_forward 3.62 s / 40,676 clips, batch 512, T4"},
+                                 "tusz": {"value": 0.145, "how": "final_eval_forward 5.59 s / (462,818 s / 12); 240 s windows every 120 s, batch 64, T4"}},
+ "catboost": {"train_total_s_chbmit": 900.6, "committee": "20 base + 10 sens, GPU T4", "inference_ms_per_12s_clip": 0.057,
+              "inference_how": "30 models, 2.3 s / 40,676 test clips, 4 CPU cores, precomputed features"},
+ "feature_extraction_ms_per_12s_clip": {"value": 66.7, "how": "tokens + 588 CatBoost features, 20 s per recorded hour on one CPU core (chb01_03)"},
+ "memory_cost_vs_hybrain_332.2MB": {"chbmit": 0.61, "tusz": 2.34}
+}
